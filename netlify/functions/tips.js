@@ -18,9 +18,20 @@ const DEMO_TIPS = [
   }
 ];
 
+let getStore = null;
+
+try {
+  ({ getStore } = require("@netlify/blobs"));
+} catch (error) {
+  getStore = null;
+}
+
 exports.handler = async () => {
   try {
-    const { getStore } = await import("@netlify/blobs");
+    if (!getStore) {
+      throw new Error("storage_unavailable");
+    }
+
     const store = getStore("duarte-tips");
     const feed = await store.get("feed.json", { type: "json" });
     const tips = feed && Array.isArray(feed.tips) ? feed.tips : DEMO_TIPS;

@@ -1,4 +1,11 @@
 const SIGNUP_URL = "https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_source=app";
+let getStore = null;
+
+try {
+  ({ getStore } = require("@netlify/blobs"));
+} catch (error) {
+  getStore = null;
+}
 
 const JSON_HEADERS = {
   "Content-Type": "application/json; charset=utf-8",
@@ -45,17 +52,28 @@ exports.handler = async (event) => {
     return json(200, { ok: true, ignored: "not_a_signal" });
   }
 
-  const { getStore } = await import("@netlify/blobs");
-  const store = getStore("duarte-tips");
-  const current = await store.get("feed.json", { type: "json" }).catch(() => null);
-  const existing = current && Array.isArray(current.tips) ? current.tips : [];
-  const withoutDuplicate = existing.filter((item) => item.id !== tip.id);
-  const tips = [tip, ...withoutDuplicate].slice(0, 80);
+  try {
+    if (!getStore) {
+      return json(500, { ok: false, error: "storage_unavailable" });
+    }
 
-  await store.setJSON("feed.json", {
-    updatedAt: new Date().toISOString(),
-    tips
-  });
+    const store = getStore("duarte-tips");
+    const current = await store.get("feed.json", { type: "json" }).catch(() => null);
+    const existing = current && Array.isArray(current.tips) ? current.tips : [];
+    const withoutDuplicate = existing.filter((item) => item.id !== tip.id);
+    const tips = [tip, ...withoutDuplicate].slice(0, 80);
+
+    await store.setJSON("feed.json", {
+      updatedAt: new Date().toISOString(),
+      tips
+    });
+  } catch (error) {
+    return json(500, {
+      ok: false,
+      error: "storage_error",
+      message: error && error.message ? error.message : "unknown_error"
+    });
+  }
 
   return json(200, { ok: true, saved: tip });
 };
