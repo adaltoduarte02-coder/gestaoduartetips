@@ -11,7 +11,11 @@ exports.handler = async (event) => {
   }
 
   const expectedSecret = process.env.TELEGRAM_WEBHOOK_SECRET || "";
-  const receivedSecret = event.headers["x-telegram-bot-api-secret-token"] || event.headers["X-Telegram-Bot-Api-Secret-Token"] || "";
+  const receivedSecret =
+    event.headers["x-telegram-bot-api-secret-token"] ||
+    event.headers["X-Telegram-Bot-Api-Secret-Token"] ||
+    "";
+
   if (expectedSecret && receivedSecret !== expectedSecret) {
     return json(401, { ok: false, error: "invalid_secret" });
   }
@@ -74,9 +78,11 @@ function parseSignal(text, post, chatId) {
   const loose = [];
 
   for (const line of lines) {
-    const match = line.match(/^([a-zA-ZÀ-ÿ0-9_ /-]{2,24})\s*[:=-]\s*(.+)$/);
+    const fieldLine = cleanSignalLine(line);
+    const match = fieldLine.match(/^([^:=-]{2,32})\s*[:=-]\s*(.+)$/);
+
     if (!match) {
-      loose.push(line);
+      loose.push(fieldLine);
       continue;
     }
 
@@ -85,7 +91,8 @@ function parseSignal(text, post, chatId) {
   }
 
   const title = fields.jogo || fields.evento || fields.partida || loose[0] || "";
-  const market = fields.mercado || fields.entrada || fields.aposta || loose[1] || "";
+  const selection = fields.entrada || fields.palpite || fields.aposta || "";
+  const market = fields.mercado || selection || loose[1] || "";
   const odd = parseNumber(fields.odd || fields.odds || fields.cotacao || "");
   const stakeRaw = fields.stake || fields.mao || fields.unidade || fields.gestao || "";
   const stakePercent = stakeRaw.includes("%") ? parseNumber(stakeRaw) : 0;
@@ -105,15 +112,29 @@ function parseSignal(text, post, chatId) {
     odd,
     stakePercent,
     stakeValue,
-    confidence: fields.confianca || fields.risco || fields.perfil || "Sinal Duarte Tips",
+    confidence: fields.tipo || fields.confianca || fields.risco || fields.perfil || "Entrada pre live",
     time: fields.horario || fields.hora || fields.data || "Agora",
-    note: fields.obs || fields.observacao || fields.info || "Entrada enviada pelo Telegram",
+    note: fields.obs || fields.observacao || fields.info || buildNote(selection, market),
     link: fields.link || SIGNUP_URL,
     source: "telegram",
     telegramChatId: chatId,
     telegramMessageId: messageId,
     createdAt
   };
+}
+
+function cleanSignalLine(value) {
+  return String(value)
+    .replace(/^[^\p{L}\p{N}]+/u, "")
+    .trim();
+}
+
+function buildNote(selection, market) {
+  if (selection && selection !== market) {
+    return selection;
+  }
+
+  return "Entrada enviada pelo Telegram";
 }
 
 function normalizeKey(value) {
