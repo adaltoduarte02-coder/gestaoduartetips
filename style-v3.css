@@ -1,0 +1,116 @@
+@import url("style-v2.css");
+
+.app-shell {
+  width: 100%;
+  max-width: none;
+}
+
+.gate-screen {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.42) 46%, rgba(3, 7, 4, 0.96) 74%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(3, 7, 4, 0.72) 100%),
+    url("assets/duarte-cover-v2.jpg") 18% center / min(58vw, 720px) auto no-repeat,
+    #030704;
+}
+
+.gate-media {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  pointer-events: none;
+  background: none;
+}
+
+.mentor-photo {
+  display: none;
+}
+
+.neon-ring {
+  display: none;
+}
+
+.gate-shade {
+  display: none;
+}
+
+.gate-content {
+  z-index: 4;
+  width: min(100%, 520px);
+  margin: 0 7vw 0 auto;
+  padding: 32px 22px;
+  gap: 16px;
+}
+
+.gate-content h1 {
+  max-width: 100%;
+  font-size: clamp(2.75rem, 6vw, 4.75rem);
+  overflow-wrap: normal;
+}
+
+.gate-copy {
+  max-width: 470px;
+}
+
+.unlock-card {
+  width: min(100%, 430px);
+}
+
+.risk-note {
+  width: min(100%, 430px);
+}
+
+@media (min-width: 760px) {
+  .gate-screen {
+    display: flex;
+  }
+
+  .gate-media {
+    min-height: 0;
+  }
+
+  .gate-content {
+    justify-content: center;
+    max-width: none;
+    margin-top: 0;
+    padding: 32px 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  .gate-screen {
+    align-items: flex-end;
+    justify-content: center;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(3, 7, 4, 0.26) 35%, rgba(3, 7, 4, 0.98) 72%),
+      url("assets/duarte-cover-v2.jpg") center top / min(112vw, 620px) auto no-repeat,
+      #030704;
+  }
+
+  .gate-content {
+    width: min(100%, 560px);
+    margin: 0 auto;
+    padding: min(58svh, 430px) 18px max(22px, env(safe-area-inset-bottom));
+  }
+
+  .gate-content h1 {
+    font-size: clamp(2.25rem, 12vw, 4.1rem);
+  }
+
+  .primary-cta,
+  .unlock-card,
+  .risk-note {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .gate-content {
+    padding-top: min(52svh, 390px);
+  }
+}

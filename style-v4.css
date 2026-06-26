@@ -1,0 +1,68 @@
+@import url("style-v3.css");
+
+.gate-screen {
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.28) 42%, rgba(3, 7, 4, 0.96) 70%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, rgba(3, 7, 4, 0.58) 100%),
+    #030704;
+}
+
+.gate-media {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.mentor-photo {
+  display: block;
+  position: absolute;
+  left: clamp(24px, 7vw, 130px);
+  top: 50%;
+  z-index: 1;
+  width: min(48vw, 680px);
+  max-height: 96svh;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  transform: translateY(-50%);
+  opacity: 0.96;
+  filter: saturate(1.08) contrast(1.08);
+}
+
+.gate-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(3, 7, 4, 0.12) 42%, rgba(3, 7, 4, 0.96) 66%),
+    linear-gradient(180deg, rgba(3, 7, 4, 0) 0%, rgba(3, 7, 4, 0.48) 100%);
+}
+
+.gate-content {
+  position: relative;
+  z-index: 5;
+}
+
+@media (max-width: 900px) {
+  .gate-screen {
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(3, 7, 4, 0.2) 32%, rgba(3, 7, 4, 0.98) 70%),
+      #030704;
+  }
+
+  .mentor-photo {
+    left: 50%;
+    top: 0;
+    width: min(112vw, 620px);
+    max-height: none;
+    transform: translateX(-50%);
+  }
+
+  .gate-media::after {
+    background: linear-gradient(180deg, rgba(3, 7, 4, 0) 0%, rgba(3, 7, 4, 0.18) 35%, rgba(3, 7, 4, 0.98) 74%);
+  }
+}

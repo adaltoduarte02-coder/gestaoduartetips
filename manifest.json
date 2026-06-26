@@ -1,0 +1,9 @@
+{
+  "name": "Gest\u00e3o de Banca Exclusiva",
+  "short_name": "Gest\u00e3o Banca",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#030704",
+  "theme_color": "#030704",
+  "icons": []
+}

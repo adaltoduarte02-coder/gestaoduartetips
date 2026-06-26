@@ -1,0 +1,24 @@
+{
+  "tips": [
+    {
+      "id": "duarte-demo-001",
+      "title": "Time A x Time B",
+      "market": "Over 1.5 gols",
+      "odd": 1.72,
+      "confidence": "Entrada moderada",
+      "time": "Hoje",
+      "note": "Exemplo de sinal. O bot do Telegram pode atualizar este arquivo/feed.",
+      "link": "https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_source=app"
+    },
+    {
+      "id": "duarte-demo-002",
+      "title": "Time C x Time D",
+      "market": "Dupla chance mandante",
+      "odd": 1.55,
+      "confidence": "Entrada protegida",
+      "time": "Hoje",
+      "note": "Clique em Fazer aposta para abrir a casa e salvar no painel.",
+      "link": "https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_source=app"
+    }
+  ]
+}

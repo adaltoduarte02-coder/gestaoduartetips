@@ -1,0 +1,4 @@
+gestaoduartetips embedded cover image fix v5
+image: embedded in index.html
+css: style-v5.css
+telegram: netlify functions + blobs ready v1

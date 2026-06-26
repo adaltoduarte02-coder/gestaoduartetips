@@ -1,0 +1,33 @@
+INTEGRACAO TELEGRAM -> APP
+
+Formato recomendado da mensagem no canal:
+
+Jogo: Flamengo x Vasco
+Mercado: Over 1.5 gols
+Odd: 1.78
+Stake: 2%
+Horario: 20:30
+Obs: Entrada moderada
+Link: https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_source=app
+
+O que acontece:
+1. Voce posta a entrada no canal.
+2. O bot do Telegram envia a mensagem para a Netlify Function.
+3. A funcao salva o sinal no Netlify Blobs.
+4. O app busca /api/tips e mostra na aba Sinais.
+5. Quando o lead clica em Fazer aposta, a entrada vai para a gestao dele como Pendente.
+
+Variaveis que precisam ser configuradas na Netlify:
+- TELEGRAM_WEBHOOK_SECRET: uma senha aleatoria para proteger o webhook.
+- TELEGRAM_ALLOWED_CHAT_ID: ID do seu canal. Opcional no primeiro teste, recomendado depois.
+
+Webhook da Netlify:
+https://gestaoduartetips.netlify.app/api/telegram-webhook
+
+Comando para conectar o bot ao webhook:
+https://api.telegram.org/botSEU_TOKEN/setWebhook?url=https://gestaoduartetips.netlify.app/api/telegram-webhook&secret_token=SUA_SENHA
+
+Importante:
+- Crie o bot no @BotFather.
+- Adicione o bot como administrador do canal.
+- Para Netlify Functions funcionar, publique por Git ou Netlify CLI. Deploy Drop simples normalmente serve melhor para site estatico.

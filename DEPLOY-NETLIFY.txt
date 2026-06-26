@@ -1,0 +1,22 @@
+GESTAO DUARTE TIPS - DEPLOY NETLIFY
+
+Opcao rapida:
+1. Acesse https://app.netlify.com/drop
+2. Arraste a pasta gestaoduartetips ou o arquivo gestaoduartetips-site.zip
+3. Depois do deploy, clique em Site configuration > Change site name
+4. Use um nome como gestaoduartetips
+
+O link gratis deve ficar parecido com:
+https://gestaoduartetips.netlify.app
+
+Dominio proprio:
+1. Compre ou use um dominio como gestaoduartetips.com.br
+2. Na Netlify, va em Domain management
+3. Clique em Add a domain
+4. Aponte o DNS conforme a Netlify mostrar
+
+Arquivos importantes:
+- index.html: app principal
+- app.js: logica de gestao, sinais e dashboard
+- tips.json: feed de sinais pronto para futuramente receber dados do Telegram/backend
+- assets/mentor.png: imagem da capa
