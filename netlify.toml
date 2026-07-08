@@ -5,6 +5,35 @@
 [functions]
   directory = "netlify/functions"
 
+[[redirects]]
+  from = "/api/football-fixtures"
+  to = "/.netlify/functions/football-fixtures"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/football-analysis"
+  to = "/.netlify/functions/football-analysis"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/netlify/functions/football-fixtures"
+  to = "/.netlify/functions/football-fixtures"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/netlify/functions/football-analysis"
+  to = "/.netlify/functions/football-analysis"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
 [[headers]]
   for = "/assets/*"
   [headers.values]
