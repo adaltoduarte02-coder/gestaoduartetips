@@ -1,7 +1,7 @@
 const SIGNUP_URL = "https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_source=app";
 const STORAGE_KEY = "gestao-banca-exclusiva-v1";
-const FOOTBALL_FIXTURES_ENDPOINT = "/api/football-fixtures";
-const FOOTBALL_ANALYSIS_ENDPOINT = "/api/football-analysis";
+const FOOTBALL_FIXTURES_ENDPOINT = "/.netlify/functions/football-fixtures";
+const FOOTBALL_ANALYSIS_ENDPOINT = "/.netlify/functions/football-analysis";
 const PRELIVE_MATCHES = [
   {
     id: "corinthians-flamengo",
@@ -785,7 +785,7 @@ async function loadFootballFixtures() {
     const response = await fetch(`${FOOTBALL_FIXTURES_ENDPOINT}?date=${encodeURIComponent(footballState.date)}`, {
       headers: { Accept: "application/json" }
     });
-    const payload = await response.json();
+    const payload = await readJsonResponse(response);
     if (!response.ok || !payload.ok) {
       throw new Error(payload.error || "API nao retornou jogos.");
     }
@@ -817,7 +817,7 @@ async function loadFootballAnalysis(matchId) {
     const response = await fetch(`${FOOTBALL_ANALYSIS_ENDPOINT}?fixture=${encodeURIComponent(match.fixtureId || match.id)}`, {
       headers: { Accept: "application/json" }
     });
-    const payload = await response.json();
+    const payload = await readJsonResponse(response);
     if (!response.ok || !payload.ok) {
       throw new Error(payload.error || "API nao retornou analise.");
     }
@@ -830,6 +830,19 @@ async function loadFootballAnalysis(matchId) {
   }
 
   renderAnalysis();
+}
+
+async function readJsonResponse(response) {
+  const text = await response.text();
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    const isHtml = text.trim().startsWith("<");
+    if (isHtml) {
+      throw new Error("As funcoes da API nao foram publicadas no Netlify. Suba a pasta netlify/functions e confirme no deploy se aparece 2 functions deployed.");
+    }
+    throw new Error("A API respondeu em formato invalido. Tente republicar o deploy.");
+  }
 }
 
 function renderAnalysisTable(matches, selected) {
