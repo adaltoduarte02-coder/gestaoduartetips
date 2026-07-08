@@ -1,4 +1,4 @@
-gestaoduartetips api-football netlify-redirect fix v6
+gestaoduartetips analises pre-live mobile fix v7
 image: embedded in index.html
-frontend: dashboard, banca, odds, jogos e analises pre-live com jogos reais
-backend: netlify functions + API_FOOTBALL_KEY
+frontend: dashboard, banca, odds, jogos e analises pre-live com lista em cards
+backend: netlify functions + API_FOOTBALL_KEY com jogos reais filtrados por relevancia

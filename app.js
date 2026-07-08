@@ -2,6 +2,7 @@ const SIGNUP_URL = "https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_s
 const STORAGE_KEY = "gestao-banca-exclusiva-v1";
 const FOOTBALL_FIXTURES_ENDPOINT = "/api/football-fixtures";
 const FOOTBALL_ANALYSIS_ENDPOINT = "/api/football-analysis";
+const MAX_MATCHES_VISIBLE = 60;
 const PRELIVE_MATCHES = [
   {
     id: "corinthians-flamengo",
@@ -511,6 +512,7 @@ const footballState = {
   error: "",
   date: getLocalDateKey(new Date()),
   matches: [],
+  totalCount: 0,
   details: {}
 };
 const moneyFormatter = new Intl.NumberFormat("pt-BR", {
@@ -791,16 +793,31 @@ async function loadFootballFixtures() {
     }
 
     footballState.status = "ready";
-    footballState.matches = Array.isArray(payload.matches) ? payload.matches : [];
+    footballState.totalCount = Number(payload.total || payload.count || 0);
+    footballState.matches = normalizeMatches(Array.isArray(payload.matches) ? payload.matches : []);
     footballState.error = "";
     selectedAnalysisId = "";
   } catch (error) {
     footballState.status = "error";
     footballState.matches = [];
+    footballState.totalCount = 0;
     footballState.error = error.message || "Falha ao buscar os jogos reais.";
   }
 
   renderAnalysis();
+}
+
+function normalizeMatches(matches) {
+  return matches
+    .map((match) => ({
+      ...match,
+      priority: Number(match.priority || 0)
+    }))
+    .sort((a, b) => {
+      if (b.priority !== a.priority) return b.priority - a.priority;
+      return Number(a.timestamp || 0) - Number(b.timestamp || 0);
+    })
+    .slice(0, MAX_MATCHES_VISIBLE);
 }
 
 async function loadFootballAnalysis(matchId) {
@@ -814,7 +831,20 @@ async function loadFootballAnalysis(matchId) {
   renderAnalysis();
 
   try {
-    const response = await fetch(`${FOOTBALL_ANALYSIS_ENDPOINT}?fixture=${encodeURIComponent(match.fixtureId || match.id)}`, {
+    const params = new URLSearchParams({
+      fixture: match.fixtureId || match.id,
+      home: match.homeId || "",
+      away: match.awayId || "",
+      league: match.leagueId || "",
+      season: match.season || "",
+      homeName: match.home || "",
+      awayName: match.away || "",
+      leagueName: match.league || "",
+      country: match.country || "",
+      venue: match.venue || "",
+      time: match.time || ""
+    });
+    const response = await fetch(`${FOOTBALL_ANALYSIS_ENDPOINT}?${params.toString()}`, {
       headers: { Accept: "application/json" }
     });
     const payload = await readJsonResponse(response);
@@ -916,13 +946,52 @@ function renderMetricPill(value) {
   return `<span class="metric-pill ${tone}">${escapeHtml(value)}</span>`;
 }
 
+function renderAnalysisTable(matches, selected) {
+  return `
+    <div class="analysis-list-grid">
+      ${matches.map((match) => {
+        const detail = footballState.details[match.id];
+        const kpis = detail?.data?.kpis || [];
+        const statusLabel = detail?.status === "loading"
+          ? "Carregando"
+          : detail?.status === "ready" ? "Abrir analise" : detail?.status === "error" ? "Tentar de novo" : "Analisar";
+        return `
+          <article class="fixture-card ${selected && selected.id === match.id ? "active" : ""}" data-analysis-id="${escapeHtml(match.id)}">
+            <div class="fixture-card-main">
+              <div class="fixture-time">
+                <strong>${escapeHtml(match.kickoff || match.time || "Hoje")}</strong>
+                <span>${escapeHtml(match.statusLong || "Pre-live")}</span>
+              </div>
+              <div class="fixture-teams">
+                <strong>${escapeHtml(match.home)}</strong>
+                <em>x</em>
+                <strong>${escapeHtml(match.away)}</strong>
+              </div>
+              <span class="fixture-league">${escapeHtml(match.country ? `${match.country} | ${match.league}` : match.league)}</span>
+            </div>
+            <div class="fixture-card-side">
+              <div class="fixture-mini-kpis">
+                <span>BTTS ${escapeHtml(getKpiValue(kpis, "BTTS") || "--")}</span>
+                <span>O1.5 ${escapeHtml(getKpiValue(kpis, "Over 1.5 FT") || "--")}</span>
+                <span>HT ${escapeHtml(getKpiValue(kpis, "Over 0.5 HT") || "--")}</span>
+              </div>
+              <button class="open-analysis-pill" type="button">${escapeHtml(statusLabel)}</button>
+            </div>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
 function renderAnalysis() {
   const matches = footballState.matches;
   const selected = getSelectedAnalysis();
   const today = new Date();
+  const total = footballState.totalCount || matches.length;
   const countLabel = footballState.status === "loading"
     ? "Carregando"
-    : matches.length === 1 ? "1 jogo hoje" : `${matches.length} jogos hoje`;
+    : total > matches.length ? `${matches.length} de ${total} jogos` : matches.length === 1 ? "1 jogo hoje" : `${matches.length} jogos hoje`;
 
   els.analysisDate.textContent = formatAnalysisDate(today);
   els.analysisCount.textContent = countLabel;
