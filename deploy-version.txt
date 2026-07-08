@@ -1,4 +1,4 @@
-gestaoduartetips api-football functions fix v4
+gestaoduartetips api-football api-route fix v5
 image: embedded in index.html
 frontend: dashboard, banca, odds, jogos e analises pre-live com jogos reais
 backend: netlify functions + API_FOOTBALL_KEY

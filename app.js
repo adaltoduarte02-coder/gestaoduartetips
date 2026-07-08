@@ -1,7 +1,7 @@
 const SIGNUP_URL = "https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_source=app";
 const STORAGE_KEY = "gestao-banca-exclusiva-v1";
-const FOOTBALL_FIXTURES_ENDPOINT = "/.netlify/functions/football-fixtures";
-const FOOTBALL_ANALYSIS_ENDPOINT = "/.netlify/functions/football-analysis";
+const FOOTBALL_FIXTURES_ENDPOINT = "/api/football-fixtures";
+const FOOTBALL_ANALYSIS_ENDPOINT = "/api/football-analysis";
 const PRELIVE_MATCHES = [
   {
     id: "corinthians-flamengo",
@@ -839,7 +839,7 @@ async function readJsonResponse(response) {
   } catch (error) {
     const isHtml = text.trim().startsWith("<");
     if (isHtml) {
-      throw new Error("As funcoes da API nao foram publicadas no Netlify. Suba a pasta netlify/functions e confirme no deploy se aparece 2 functions deployed.");
+      throw new Error("A rota /api caiu na capa do app. Suba tambem o arquivo _redirects e confirme no deploy: 3 redirect rules processed e 2 functions deployed.");
     }
     throw new Error("A API respondeu em formato invalido. Tente republicar o deploy.");
   }
