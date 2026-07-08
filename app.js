@@ -177,8 +177,315 @@ const PRELIVE_MATCHES = [
       { market: "Espanha mais de 4.5 cantos", edge: "Posse alta gera volume ofensivo", confidence: "Media", odd: 1.70 },
       { market: "Menos de 1.5 gols HT", edge: "Amostra aponta estudo inicial", confidence: "Alta", odd: 1.38 }
     ]
+  },
+  {
+    id: "sao-paulo-santos",
+    league: "Brasil Serie A",
+    time: "Hoje 18:30",
+    home: "Sao Paulo",
+    away: "Santos",
+    venue: "Morumbi",
+    confidence: "Leitura moderada",
+    summary: "Classico com tendencia de jogo estudado no inicio e crescimento de volume no segundo tempo. O mandante costuma finalizar mais em casa, enquanto o visitante oferece espacos quando precisa sair.",
+    tags: ["Classico", "HT travado", "Cantos casa"],
+    score: { home: "6o", away: "14o" },
+    kpis: [
+      { label: "Gols FT", value: "2.05", note: "media combinada" },
+      { label: "Gols HT", value: "0.68", note: "primeiro tempo" },
+      { label: "Cantos", value: "10.4", note: "media total" },
+      { label: "Cartoes", value: "5.4", note: "classico fisico" }
+    ],
+    homeStats: {
+      form: "3V 1E 1D",
+      goalsFor: 1.55,
+      goalsAgainst: 0.85,
+      htGoals: 0.42,
+      corners: 6.1,
+      cards: 2.5,
+      cleanSheets: "45%",
+      btts: "48%",
+      over15: "68%",
+      over25: "38%"
+    },
+    awayStats: {
+      form: "1V 2E 2D",
+      goalsFor: 1.00,
+      goalsAgainst: 1.35,
+      htGoals: 0.33,
+      corners: 4.6,
+      cards: 2.9,
+      cleanSheets: "25%",
+      btts: "52%",
+      over15: "64%",
+      over25: "42%"
+    },
+    h2h: {
+      games: 10,
+      homeWins: 4,
+      draws: 3,
+      awayWins: 3,
+      avgGoals: 2.00,
+      avgCorners: 10.0,
+      avgCards: 5.8,
+      over15: "60%",
+      over25: "30%",
+      btts: "50%"
+    },
+    suggestions: [
+      { market: "Menos de 1.5 gols HT", edge: "Classico tende a iniciar mais amarrado", confidence: "Alta", odd: 1.36 },
+      { market: "Sao Paulo mais de 5.5 cantos", edge: "Mandante sustenta volume alto no Morumbi", confidence: "Media", odd: 1.78 },
+      { market: "Mais de 3.5 cartoes", edge: "Historico direto com disputa forte", confidence: "Media", odd: 1.55 }
+    ]
+  },
+  {
+    id: "botafogo-vasco",
+    league: "Brasil Serie A",
+    time: "Hoje 20:00",
+    home: "Botafogo",
+    away: "Vasco",
+    venue: "Nilton Santos",
+    confidence: "Leitura forte",
+    summary: "Botafogo chega com boa chegada por corredor e pressao territorial em casa. Vasco costuma baixar linhas fora, o que aumenta chance de cantos e reduz exposicao para gols altos no primeiro tempo.",
+    tags: ["Mandante", "Cantos", "HT seguro"],
+    score: { home: "4o", away: "13o" },
+    kpis: [
+      { label: "Gols FT", value: "2.28", note: "media combinada" },
+      { label: "Gols HT", value: "0.78", note: "primeiro tempo" },
+      { label: "Cantos", value: "10.9", note: "media total" },
+      { label: "Cartoes", value: "5.1", note: "duelo intenso" }
+    ],
+    homeStats: {
+      form: "4V 0E 1D",
+      goalsFor: 1.65,
+      goalsAgainst: 0.75,
+      htGoals: 0.52,
+      corners: 6.3,
+      cards: 2.3,
+      cleanSheets: "55%",
+      btts: "42%",
+      over15: "76%",
+      over25: "46%"
+    },
+    awayStats: {
+      form: "1V 1E 3D",
+      goalsFor: 0.95,
+      goalsAgainst: 1.45,
+      htGoals: 0.30,
+      corners: 4.0,
+      cards: 2.8,
+      cleanSheets: "20%",
+      btts: "50%",
+      over15: "66%",
+      over25: "44%"
+    },
+    h2h: {
+      games: 10,
+      homeWins: 5,
+      draws: 2,
+      awayWins: 3,
+      avgGoals: 2.20,
+      avgCorners: 10.5,
+      avgCards: 5.5,
+      over15: "70%",
+      over25: "40%",
+      btts: "50%"
+    },
+    suggestions: [
+      { market: "Botafogo empate anula", edge: "Mandante mais consistente e menos exposto", confidence: "Alta", odd: 1.44 },
+      { market: "Botafogo mais de 5.5 cantos", edge: "Pressao alta contra visitante recuado", confidence: "Media", odd: 1.80 },
+      { market: "Menos de 1.5 gols HT", edge: "Vasco tende a fechar linhas no inicio", confidence: "Media", odd: 1.40 }
+    ]
+  },
+  {
+    id: "gremio-internacional",
+    league: "Brasil Serie A",
+    time: "Hoje 17:00",
+    home: "Gremio",
+    away: "Internacional",
+    venue: "Arena do Gremio",
+    confidence: "Leitura cautelosa",
+    summary: "Grenal costuma ter ritmo quebrado, muita disputa e valor maior em cartoes do que em linhas agressivas de gols. Para gols, a leitura pede protecao no HT.",
+    tags: ["Classico", "Cartoes", "Under HT"],
+    score: { home: "9o", away: "8o" },
+    kpis: [
+      { label: "Gols FT", value: "1.92", note: "media combinada" },
+      { label: "Gols HT", value: "0.62", note: "primeiro tempo" },
+      { label: "Cantos", value: "9.3", note: "media total" },
+      { label: "Cartoes", value: "6.4", note: "alta tensao" }
+    ],
+    homeStats: {
+      form: "2V 2E 1D",
+      goalsFor: 1.20,
+      goalsAgainst: 1.00,
+      htGoals: 0.35,
+      corners: 5.0,
+      cards: 3.0,
+      cleanSheets: "35%",
+      btts: "46%",
+      over15: "58%",
+      over25: "28%"
+    },
+    awayStats: {
+      form: "2V 1E 2D",
+      goalsFor: 1.15,
+      goalsAgainst: 1.05,
+      htGoals: 0.38,
+      corners: 4.8,
+      cards: 3.1,
+      cleanSheets: "30%",
+      btts: "48%",
+      over15: "60%",
+      over25: "32%"
+    },
+    h2h: {
+      games: 10,
+      homeWins: 3,
+      draws: 4,
+      awayWins: 3,
+      avgGoals: 1.80,
+      avgCorners: 9.1,
+      avgCards: 6.8,
+      over15: "50%",
+      over25: "20%",
+      btts: "40%"
+    },
+    suggestions: [
+      { market: "Mais de 4.5 cartoes", edge: "Classico com historico disciplinar alto", confidence: "Alta", odd: 1.52 },
+      { market: "Menos de 1.5 gols HT", edge: "Primeiro tempo geralmente travado", confidence: "Alta", odd: 1.34 },
+      { market: "Menos de 3.5 gols FT", edge: "Amostra direta raramente vira placar largo", confidence: "Media", odd: 1.30 }
+    ]
+  },
+  {
+    id: "bahia-fortaleza",
+    league: "Brasil Serie A",
+    time: "Hoje 19:30",
+    home: "Bahia",
+    away: "Fortaleza",
+    venue: "Fonte Nova",
+    confidence: "Leitura moderada",
+    summary: "Bahia costuma aumentar volume ofensivo em casa, enquanto Fortaleza e perigoso em transicao. O confronto favorece leitura de gols protegidos e cantos do mandante.",
+    tags: ["Casa forte", "BTTS", "Cantos"],
+    score: { home: "5o", away: "10o" },
+    kpis: [
+      { label: "Gols FT", value: "2.42", note: "media combinada" },
+      { label: "Gols HT", value: "0.82", note: "primeiro tempo" },
+      { label: "Cantos", value: "10.6", note: "media total" },
+      { label: "Cartoes", value: "4.7", note: "media estavel" }
+    ],
+    homeStats: {
+      form: "3V 1E 1D",
+      goalsFor: 1.75,
+      goalsAgainst: 1.05,
+      htGoals: 0.54,
+      corners: 6.0,
+      cards: 2.2,
+      cleanSheets: "35%",
+      btts: "58%",
+      over15: "78%",
+      over25: "52%"
+    },
+    awayStats: {
+      form: "2V 2E 1D",
+      goalsFor: 1.25,
+      goalsAgainst: 1.10,
+      htGoals: 0.42,
+      corners: 4.9,
+      cards: 2.4,
+      cleanSheets: "30%",
+      btts: "55%",
+      over15: "70%",
+      over25: "42%"
+    },
+    h2h: {
+      games: 10,
+      homeWins: 4,
+      draws: 2,
+      awayWins: 4,
+      avgGoals: 2.30,
+      avgCorners: 10.4,
+      avgCards: 4.8,
+      over15: "70%",
+      over25: "40%",
+      btts: "60%"
+    },
+    suggestions: [
+      { market: "Mais de 1.5 gols FT", edge: "Boa frequencia combinada de over", confidence: "Alta", odd: 1.38 },
+      { market: "Bahia mais de 5.5 cantos", edge: "Mandante tem pressao alta na Fonte Nova", confidence: "Media", odd: 1.76 },
+      { market: "Ambas marcam sim", edge: "Dois ataques com boa chegada recente", confidence: "Media", odd: 1.82 }
+    ]
+  },
+  {
+    id: "atletico-mg-fluminense",
+    league: "Brasil Serie A",
+    time: "Hoje 21:30",
+    home: "Atletico-MG",
+    away: "Fluminense",
+    venue: "Arena MRV",
+    confidence: "Leitura moderada",
+    summary: "Atletico-MG tende a empurrar o jogo em casa e gerar cantos. Fluminense valoriza posse, mas pode sofrer em bolas laterais. A leitura favorece mercado de cantos e gol mandante protegido.",
+    tags: ["Cantos casa", "Posse", "Gol mandante"],
+    score: { home: "7o", away: "11o" },
+    kpis: [
+      { label: "Gols FT", value: "2.26", note: "media combinada" },
+      { label: "Gols HT", value: "0.76", note: "primeiro tempo" },
+      { label: "Cantos", value: "10.7", note: "media total" },
+      { label: "Cartoes", value: "4.9", note: "jogo tecnico" }
+    ],
+    homeStats: {
+      form: "3V 0E 2D",
+      goalsFor: 1.60,
+      goalsAgainst: 0.95,
+      htGoals: 0.48,
+      corners: 6.2,
+      cards: 2.4,
+      cleanSheets: "40%",
+      btts: "50%",
+      over15: "72%",
+      over25: "44%"
+    },
+    awayStats: {
+      form: "2V 1E 2D",
+      goalsFor: 1.10,
+      goalsAgainst: 1.20,
+      htGoals: 0.36,
+      corners: 4.7,
+      cards: 2.3,
+      cleanSheets: "28%",
+      btts: "52%",
+      over15: "68%",
+      over25: "38%"
+    },
+    h2h: {
+      games: 10,
+      homeWins: 5,
+      draws: 2,
+      awayWins: 3,
+      avgGoals: 2.20,
+      avgCorners: 10.6,
+      avgCards: 5.0,
+      over15: "70%",
+      over25: "40%",
+      btts: "50%"
+    },
+    suggestions: [
+      { market: "Atletico-MG mais de 4.5 cantos", edge: "Mandante com volume pelos lados", confidence: "Media", odd: 1.62 },
+      { market: "Atletico-MG mais de 0.5 gol", edge: "Boa media ofensiva em casa", confidence: "Alta", odd: 1.28 },
+      { market: "Mais de 1.5 gols FT", edge: "Amostras recentes sustentam linha baixa", confidence: "Media", odd: 1.42 }
+    ]
   }
 ];
+
+const DAILY_MATCH_GROUPS = [
+  ["corinthians-flamengo", "palmeiras-cruzeiro", "uruguai-espanha"],
+  ["sao-paulo-santos", "botafogo-vasco", "bahia-fortaleza"],
+  ["gremio-internacional", "atletico-mg-fluminense", "corinthians-flamengo"],
+  ["palmeiras-cruzeiro", "sao-paulo-santos", "botafogo-vasco"],
+  ["uruguai-espanha", "bahia-fortaleza", "atletico-mg-fluminense"],
+  ["corinthians-flamengo", "gremio-internacional", "sao-paulo-santos"],
+  ["palmeiras-cruzeiro", "botafogo-vasco", "atletico-mg-fluminense"]
+];
+
+const DAILY_KICKOFFS = ["16:00", "18:30", "20:00", "21:30"];
 
 const defaults = {
   access: {
@@ -196,7 +503,7 @@ const defaults = {
 };
 
 const state = loadState();
-let selectedAnalysisId = PRELIVE_MATCHES[0].id;
+let selectedAnalysisId = "";
 const moneyFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL"
@@ -254,6 +561,7 @@ const els = {
   compoundResult: document.querySelector("#compoundResult"),
   cycleCount: document.querySelector("#cycleCount"),
   cycleList: document.querySelector("#cycleList"),
+  analysisDate: document.querySelector("#analysisDate"),
   analysisCount: document.querySelector("#analysisCount"),
   analysisList: document.querySelector("#analysisList"),
   analysisDetail: document.querySelector("#analysisDetail"),
@@ -350,9 +658,20 @@ function bindEvents() {
     if (!button) return;
     selectedAnalysisId = button.dataset.analysisId;
     renderAnalysis();
+    window.setTimeout(() => {
+      els.analysisDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 40);
   });
 
   els.analysisDetail.addEventListener("click", (event) => {
+    const closeButton = event.target.closest("[data-close-analysis]");
+    if (closeButton) {
+      selectedAnalysisId = "";
+      renderAnalysis();
+      els.analysisList.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
     const button = event.target.closest("[data-prelive-bet]");
     if (!button) return;
     registerPreliveSuggestion(button.dataset.preliveBet);
@@ -446,21 +765,59 @@ function renderBetList() {
 }
 
 function renderAnalysis() {
+  const matches = getDailyMatches();
   const selected = getSelectedAnalysis();
-  els.analysisCount.textContent = `${PRELIVE_MATCHES.length} ${PRELIVE_MATCHES.length === 1 ? "jogo" : "jogos"}`;
-  els.analysisList.innerHTML = PRELIVE_MATCHES.map((match) => `
-    <button class="analysis-card ${match.id === selected.id ? "active" : ""}" type="button" data-analysis-id="${escapeHtml(match.id)}">
+  const today = new Date();
+  const countLabel = matches.length === 1 ? "1 jogo hoje" : `${matches.length} jogos hoje`;
+
+  els.analysisDate.textContent = formatAnalysisDate(today);
+  els.analysisCount.textContent = countLabel;
+  els.analysisList.innerHTML = matches.map((match) => `
+    <button class="analysis-card ${selected && match.id === selected.id ? "active" : ""}" type="button" data-analysis-id="${escapeHtml(match.id)}">
       <span class="analysis-card-time">${escapeHtml(match.time)} | ${escapeHtml(match.league)}</span>
-      <strong>${escapeHtml(match.home)} x ${escapeHtml(match.away)}</strong>
-      <small>${escapeHtml(match.confidence)} | ${escapeHtml(match.tags.join(" / "))}</small>
+      <span class="match-card-teams">
+        <strong>${escapeHtml(match.home)}</strong>
+        <em>x</em>
+        <strong>${escapeHtml(match.away)}</strong>
+      </span>
+      <span class="analysis-card-meta">${escapeHtml(match.venue)} | ${escapeHtml(match.confidence)}</span>
+      <span class="match-card-kpis">
+        <span>FT ${escapeHtml(match.kpis[0].value)}</span>
+        <span>HT ${escapeHtml(match.kpis[1].value)}</span>
+        <span>Cantos ${escapeHtml(match.kpis[2].value)}</span>
+      </span>
     </button>
   `).join("");
 
+  els.analysisDetail.classList.toggle("is-hidden", !selected);
+  if (!selected) {
+    els.analysisDetail.innerHTML = "";
+    return;
+  }
+
   els.analysisDetail.innerHTML = `
+    <div class="analysis-detail-top">
+      <button class="ghost-action" type="button" data-close-analysis>Voltar</button>
+      <span>${escapeHtml(selected.time)}</span>
+    </div>
+
     <div class="analysis-hero">
       <p class="eyebrow">${escapeHtml(selected.league)}</p>
-      <h2>${escapeHtml(selected.home)} x ${escapeHtml(selected.away)}</h2>
-      <span>${escapeHtml(selected.time)} | ${escapeHtml(selected.venue)}</span>
+      <div class="match-title-grid">
+        <div>
+          <span>Casa | ${escapeHtml(selected.score.home)}</span>
+          <strong>${escapeHtml(selected.home)}</strong>
+        </div>
+        <em>x</em>
+        <div>
+          <span>Fora | ${escapeHtml(selected.score.away)}</span>
+          <strong>${escapeHtml(selected.away)}</strong>
+        </div>
+      </div>
+      <span>${escapeHtml(selected.venue)} | ${escapeHtml(formatAnalysisDate(new Date()))}</span>
+      <div class="analysis-tags">
+        ${selected.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}
+      </div>
     </div>
 
     <div class="analysis-kpi-grid">
@@ -474,7 +831,7 @@ function renderAnalysis() {
     </div>
 
     <div class="analysis-summary">
-      <strong>Leitura pre-live</strong>
+      <strong>Leitura rapida</strong>
       <p>${escapeHtml(selected.summary)}</p>
     </div>
 
@@ -503,7 +860,7 @@ function renderAnalysis() {
 
     <div class="suggestion-panel">
       <div class="panel-head compact">
-        <h2>Melhores opcoes</h2>
+        <h2>Sugestoes pre-live</h2>
         <span>pre-live</span>
       </div>
       <div class="suggestion-list">
@@ -665,6 +1022,7 @@ function buildBet() {
 
 function registerPreliveSuggestion(indexValue) {
   const match = getSelectedAnalysis();
+  if (!match) return;
   const suggestion = match.suggestions[Number(indexValue)];
   if (!suggestion) return;
 
@@ -686,7 +1044,52 @@ function registerPreliveSuggestion(indexValue) {
 }
 
 function getSelectedAnalysis() {
-  return PRELIVE_MATCHES.find((match) => match.id === selectedAnalysisId) || PRELIVE_MATCHES[0];
+  const matches = getDailyMatches();
+  return matches.find((match) => match.id === selectedAnalysisId) || null;
+}
+
+function getDailyMatches(date = new Date()) {
+  const dateKey = getLocalDateKey(date);
+  const groupIndex = getDayIndex(date) % DAILY_MATCH_GROUPS.length;
+  const group = DAILY_MATCH_GROUPS[groupIndex] || DAILY_MATCH_GROUPS[0];
+
+  return group
+    .map((matchId, index) => {
+      const baseMatch = PRELIVE_MATCHES.find((match) => match.id === matchId);
+      if (!baseMatch) return null;
+      const kickoff = DAILY_KICKOFFS[index] || baseMatch.time.replace("Hoje ", "");
+      return {
+        ...baseMatch,
+        sourceId: baseMatch.id,
+        id: `${baseMatch.id}-${dateKey}`,
+        kickoff,
+        time: `Hoje ${kickoff}`
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+}
+
+function getDayIndex(date) {
+  const current = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const start = new Date(2026, 0, 1);
+  const dayMs = 24 * 60 * 60 * 1000;
+  return Math.max(0, Math.floor((current - start) / dayMs));
+}
+
+function getLocalDateKey(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatAnalysisDate(date) {
+  return new Intl.DateTimeFormat("pt-BR", {
+    weekday: "short",
+    day: "2-digit",
+    month: "2-digit"
+  }).format(date);
 }
 
 function calculateBetProfit(stake, odd, result) {

@@ -1,4 +1,4 @@
-gestaoduartetips pre-live analysis v1
+gestaoduartetips pre-live daily analysis v2
 image: embedded in index.html
-frontend: dashboard, banca, odds, jogos e analises pre-live
+frontend: dashboard, banca, odds, jogos e analises pre-live com agenda diaria
 deploy: static app
