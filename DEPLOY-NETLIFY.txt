@@ -1,10 +1,14 @@
-GESTAO DUARTE TIPS PRE-LIVE - DEPLOY
+GESTAO DUARTE TIPS PRE-LIVE COM API - DEPLOY
 
-Opcao rapida para site estatico:
-1. Acesse https://app.netlify.com/drop
-2. Arraste a pasta gestaoduartetips-prelive-pronto ou o arquivo gestaoduartetips-prelive.zip
-3. Depois do deploy, clique em Site configuration > Change site name
-4. Use um nome como gestaoduartetips
+Publicar pelo GitHub/Netlify:
+1. Suba todos os arquivos e pastas deste pacote no GitHub.
+2. No Netlify, o projeto deve publicar pela branch main.
+3. Configure a variavel secreta API_FOOTBALL_KEY no Netlify.
+4. Va em Deploys > Trigger deploy > Deploy project.
+
+Esta versao usa backend do Netlify:
+- netlify/functions/football-fixtures.js busca os jogos reais do dia.
+- netlify/functions/football-analysis.js monta a analise quando clicar no jogo.
 
 O link gratis deve ficar parecido com:
 https://gestaoduartetips.netlify.app
@@ -19,8 +23,9 @@ Arquivos importantes:
 - index.html: app principal
 - app.js: logica de gestao, analises pre-live e dashboard
 - style.css: visual principal do app
+- netlify/functions: integracao segura com API-Football
+- API-FOOTBALL-CONFIG.txt: passo a passo da variavel secreta
 - assets/mentor.png: imagem da capa
 
 Observacao:
-Esta versao funciona como site estatico.
-Para dados reais de jogos, rankings e historicos, plugue uma API de futebol no proximo passo.
+Sem API_FOOTBALL_KEY no Netlify, a aba Analises mostra aviso e nao inventa jogos.

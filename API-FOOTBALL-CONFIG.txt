@@ -1,0 +1,15 @@
+CONFIGURAR API-FOOTBALL NO NETLIFY
+
+1. Entre no projeto no Netlify.
+2. Va em Project configuration > Environment variables.
+3. Clique em Add a variable > Add a single variable.
+4. Em Key, coloque:
+   API_FOOTBALL_KEY
+5. Em Value, cole a sua API-KEY da API-Football.
+6. Clique em Create variable.
+7. Va em Deploys > Trigger deploy > Deploy project.
+
+Importante:
+- Nao coloque a chave dentro de app.js.
+- Nao suba print com a chave aparecendo.
+- Se a chave foi exposta em algum lugar publico, clique em Reset my API-KEY no painel da API-Football.

@@ -1,4 +1,4 @@
-gestaoduartetips pre-live daily analysis v2
+gestaoduartetips api-football real fixtures v3
 image: embedded in index.html
-frontend: dashboard, banca, odds, jogos e analises pre-live com agenda diaria
-deploy: static app
+frontend: dashboard, banca, odds, jogos e analises pre-live com jogos reais
+backend: netlify functions + API_FOOTBALL_KEY

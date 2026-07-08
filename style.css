@@ -774,6 +774,165 @@ select:focus {
   overflow-wrap: anywhere;
 }
 
+.analysis-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(220, 228, 223, 0.1);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.analysis-table {
+  width: 100%;
+  min-width: 920px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.analysis-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: var(--silver);
+  background: rgba(30, 33, 31, 0.96);
+  padding: 12px 14px;
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.analysis-table td {
+  padding: 13px 14px;
+  border-top: 1px solid rgba(220, 228, 223, 0.08);
+  color: var(--text);
+  font-size: 0.82rem;
+  vertical-align: middle;
+}
+
+.analysis-table tr {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.analysis-table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.analysis-table tr:hover,
+.analysis-table tr.active {
+  background: rgba(50, 255, 79, 0.09);
+}
+
+.fixture-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+}
+
+.fixture-star {
+  color: var(--amber);
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.fixture-cell div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.fixture-cell strong,
+.fixture-cell em,
+.time-cell,
+.league-cell {
+  overflow-wrap: anywhere;
+}
+
+.fixture-cell strong {
+  color: var(--silver);
+  font-size: 0.9rem;
+}
+
+.fixture-cell em {
+  color: #a971ff;
+  font-style: normal;
+  font-weight: 850;
+}
+
+.league-cell {
+  display: block;
+  max-width: 210px;
+  color: #a971ff;
+  font-weight: 850;
+}
+
+.time-cell {
+  color: var(--silver);
+  font-size: 0.84rem;
+}
+
+.metric-pill,
+.open-analysis-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 28px;
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 0.76rem;
+  font-weight: 950;
+}
+
+.metric-pill.good {
+  color: #8dff8f;
+}
+
+.metric-pill.mid {
+  color: #ffe767;
+}
+
+.metric-pill.low {
+  color: #ff6868;
+}
+
+.metric-pill.empty {
+  color: var(--muted);
+}
+
+.open-analysis-pill {
+  border: 1px solid rgba(50, 255, 79, 0.24);
+  color: var(--green);
+  background: rgba(50, 255, 79, 0.07);
+}
+
+.analysis-state,
+.analysis-warning {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid rgba(220, 228, 223, 0.12);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.analysis-state strong,
+.analysis-warning strong {
+  color: var(--silver);
+}
+
+.analysis-state p,
+.analysis-warning p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.analysis-warning {
+  border-color: rgba(241, 201, 106, 0.28);
+  background: rgba(241, 201, 106, 0.06);
+}
+
 .bet-title {
   min-width: 0;
   color: var(--silver);

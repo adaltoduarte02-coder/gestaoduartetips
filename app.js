@@ -1,5 +1,7 @@
 const SIGNUP_URL = "https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_source=app";
 const STORAGE_KEY = "gestao-banca-exclusiva-v1";
+const FOOTBALL_FIXTURES_ENDPOINT = "/api/football-fixtures";
+const FOOTBALL_ANALYSIS_ENDPOINT = "/api/football-analysis";
 const PRELIVE_MATCHES = [
   {
     id: "corinthians-flamengo",
@@ -504,6 +506,13 @@ const defaults = {
 
 const state = loadState();
 let selectedAnalysisId = "";
+const footballState = {
+  status: "loading",
+  error: "",
+  date: getLocalDateKey(new Date()),
+  matches: [],
+  details: {}
+};
 const moneyFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL"
@@ -588,6 +597,7 @@ function init() {
   renderAccess();
   renderAll();
   calculateCompound();
+  loadFootballFixtures();
 }
 
 function bindEvents() {
@@ -658,6 +668,7 @@ function bindEvents() {
     if (!button) return;
     selectedAnalysisId = button.dataset.analysisId;
     renderAnalysis();
+    loadFootballAnalysis(selectedAnalysisId);
     window.setTimeout(() => {
       els.analysisDetail.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 40);
@@ -764,30 +775,154 @@ function renderBetList() {
   }).join("");
 }
 
+async function loadFootballFixtures() {
+  footballState.status = "loading";
+  footballState.error = "";
+  footballState.date = getLocalDateKey(new Date());
+  renderAnalysis();
+
+  try {
+    const response = await fetch(`${FOOTBALL_FIXTURES_ENDPOINT}?date=${encodeURIComponent(footballState.date)}`, {
+      headers: { Accept: "application/json" }
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) {
+      throw new Error(payload.error || "API nao retornou jogos.");
+    }
+
+    footballState.status = "ready";
+    footballState.matches = Array.isArray(payload.matches) ? payload.matches : [];
+    footballState.error = "";
+    selectedAnalysisId = "";
+  } catch (error) {
+    footballState.status = "error";
+    footballState.matches = [];
+    footballState.error = error.message || "Falha ao buscar os jogos reais.";
+  }
+
+  renderAnalysis();
+}
+
+async function loadFootballAnalysis(matchId) {
+  const match = footballState.matches.find((item) => item.id === matchId);
+  if (!match) return;
+
+  const current = footballState.details[matchId];
+  if (current?.status === "ready" || current?.status === "loading") return;
+
+  footballState.details[matchId] = { status: "loading" };
+  renderAnalysis();
+
+  try {
+    const response = await fetch(`${FOOTBALL_ANALYSIS_ENDPOINT}?fixture=${encodeURIComponent(match.fixtureId || match.id)}`, {
+      headers: { Accept: "application/json" }
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) {
+      throw new Error(payload.error || "API nao retornou analise.");
+    }
+    footballState.details[matchId] = { status: "ready", data: payload };
+  } catch (error) {
+    footballState.details[matchId] = {
+      status: "error",
+      error: error.message || "Falha ao montar analise."
+    };
+  }
+
+  renderAnalysis();
+}
+
+function renderAnalysisTable(matches, selected) {
+  return `
+    <div class="analysis-table-wrap">
+      <table class="analysis-table">
+        <thead>
+          <tr>
+            <th>Casa x Visitante</th>
+            <th>Liga</th>
+            <th>Data Hora</th>
+            <th>BTTS</th>
+            <th>0.5g HT</th>
+            <th>1.5g FT</th>
+            <th>2.5g FT</th>
+            <th>Analise</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${matches.map((match) => {
+            const detail = footballState.details[match.id];
+            const kpis = detail?.data?.kpis || [];
+            return `
+              <tr class="${selected && selected.id === match.id ? "active" : ""}" data-analysis-id="${escapeHtml(match.id)}">
+                <td>
+                  <div class="fixture-cell">
+                    <span class="fixture-star">★</span>
+                    <div>
+                      <strong>${escapeHtml(match.home)}</strong>
+                      <em>${escapeHtml(match.away)}</em>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="league-cell">${escapeHtml(match.country ? `${match.country} | ${match.league}` : match.league)}</span>
+                </td>
+                <td>
+                  <strong class="time-cell">${escapeHtml(match.time.replace("Hoje ", "Hoje "))}</strong>
+                </td>
+                <td>${renderMetricPill(getKpiValue(kpis, "BTTS"))}</td>
+                <td>${renderMetricPill(getKpiValue(kpis, "Over 0.5 HT"))}</td>
+                <td>${renderMetricPill(getKpiValue(kpis, "Over 1.5 FT"))}</td>
+                <td>${renderMetricPill(getKpiValue(kpis, "Over 2.5 FT"))}</td>
+                <td><span class="open-analysis-pill">${detail?.status === "ready" ? "Abrir" : "Carregar"}</span></td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderAnalysisState(title, message) {
+  return `
+    <div class="analysis-state">
+      <strong>${escapeHtml(title)}</strong>
+      <p>${escapeHtml(message)}</p>
+    </div>
+  `;
+}
+
+function getKpiValue(kpis, label) {
+  return kpis.find((kpi) => kpi.label === label)?.value || "";
+}
+
+function renderMetricPill(value) {
+  if (!value || value === "-") return `<span class="metric-pill empty">--</span>`;
+  const number = Number(String(value).replace("%", ""));
+  const tone = number >= 65 ? "good" : number >= 45 ? "mid" : "low";
+  return `<span class="metric-pill ${tone}">${escapeHtml(value)}</span>`;
+}
+
 function renderAnalysis() {
-  const matches = getDailyMatches();
+  const matches = footballState.matches;
   const selected = getSelectedAnalysis();
   const today = new Date();
-  const countLabel = matches.length === 1 ? "1 jogo hoje" : `${matches.length} jogos hoje`;
+  const countLabel = footballState.status === "loading"
+    ? "Carregando"
+    : matches.length === 1 ? "1 jogo hoje" : `${matches.length} jogos hoje`;
 
   els.analysisDate.textContent = formatAnalysisDate(today);
   els.analysisCount.textContent = countLabel;
-  els.analysisList.innerHTML = matches.map((match) => `
-    <button class="analysis-card ${selected && match.id === selected.id ? "active" : ""}" type="button" data-analysis-id="${escapeHtml(match.id)}">
-      <span class="analysis-card-time">${escapeHtml(match.time)} | ${escapeHtml(match.league)}</span>
-      <span class="match-card-teams">
-        <strong>${escapeHtml(match.home)}</strong>
-        <em>x</em>
-        <strong>${escapeHtml(match.away)}</strong>
-      </span>
-      <span class="analysis-card-meta">${escapeHtml(match.venue)} | ${escapeHtml(match.confidence)}</span>
-      <span class="match-card-kpis">
-        <span>FT ${escapeHtml(match.kpis[0].value)}</span>
-        <span>HT ${escapeHtml(match.kpis[1].value)}</span>
-        <span>Cantos ${escapeHtml(match.kpis[2].value)}</span>
-      </span>
-    </button>
-  `).join("");
+
+  if (footballState.status === "loading") {
+    els.analysisList.innerHTML = renderAnalysisState("Carregando jogos reais do dia...", "A busca vem direto da API-Football.");
+  } else if (footballState.status === "error") {
+    els.analysisList.innerHTML = renderAnalysisState("Nao foi possivel carregar os jogos reais.", footballState.error || "Confira a chave da API no Netlify.");
+  } else if (!matches.length) {
+    els.analysisList.innerHTML = renderAnalysisState("Nenhum jogo encontrado para hoje.", "A API nao retornou confrontos para esta data.");
+  } else {
+    els.analysisList.innerHTML = renderAnalysisTable(matches, selected);
+  }
 
   els.analysisDetail.classList.toggle("is-hidden", !selected);
   if (!selected) {
@@ -795,33 +930,56 @@ function renderAnalysis() {
     return;
   }
 
+  const detail = footballState.details[selected.id];
+  if (!detail || detail.status === "loading") {
+    els.analysisDetail.innerHTML = renderAnalysisState("Montando analise real...", "Buscando ultimos jogos, confronto direto e classificacao.");
+    return;
+  }
+
+  if (detail.status === "error") {
+    els.analysisDetail.innerHTML = `
+      <div class="analysis-detail-top">
+        <button class="ghost-action" type="button" data-close-analysis>Voltar</button>
+        <span>${escapeHtml(selected.time)}</span>
+      </div>
+      ${renderAnalysisState("Nao foi possivel montar a analise.", detail.error || "Tente novamente em alguns minutos.")}
+    `;
+    return;
+  }
+
+  const analysis = detail.data;
+  const selectedMatch = analysis.match || selected;
+  const h2h = analysis.h2h || {};
+
   els.analysisDetail.innerHTML = `
     <div class="analysis-detail-top">
       <button class="ghost-action" type="button" data-close-analysis>Voltar</button>
-      <span>${escapeHtml(selected.time)}</span>
+      <span>${escapeHtml(selectedMatch.time)}</span>
     </div>
 
     <div class="analysis-hero">
-      <p class="eyebrow">${escapeHtml(selected.league)}</p>
+      <p class="eyebrow">${escapeHtml(selectedMatch.league)}</p>
       <div class="match-title-grid">
         <div>
-          <span>Casa | ${escapeHtml(selected.score.home)}</span>
-          <strong>${escapeHtml(selected.home)}</strong>
+          <span>Casa | ${escapeHtml(selectedMatch.score?.home || "-")}</span>
+          <strong>${escapeHtml(selectedMatch.home)}</strong>
         </div>
         <em>x</em>
         <div>
-          <span>Fora | ${escapeHtml(selected.score.away)}</span>
-          <strong>${escapeHtml(selected.away)}</strong>
+          <span>Fora | ${escapeHtml(selectedMatch.score?.away || "-")}</span>
+          <strong>${escapeHtml(selectedMatch.away)}</strong>
         </div>
       </div>
-      <span>${escapeHtml(selected.venue)} | ${escapeHtml(formatAnalysisDate(new Date()))}</span>
+      <span>${escapeHtml(selectedMatch.venue)} | ${escapeHtml(formatAnalysisDate(new Date()))}</span>
       <div class="analysis-tags">
-        ${selected.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}
+        <span>Dados reais</span>
+        <span>API-Football</span>
+        <span>Sem jogos inventados</span>
       </div>
     </div>
 
     <div class="analysis-kpi-grid">
-      ${selected.kpis.map((kpi) => `
+      ${(analysis.kpis || []).map((kpi) => `
         <div class="analysis-kpi">
           <span>${escapeHtml(kpi.label)}</span>
           <strong>${escapeHtml(kpi.value)}</strong>
@@ -832,29 +990,36 @@ function renderAnalysis() {
 
     <div class="analysis-summary">
       <strong>Leitura rapida</strong>
-      <p>${escapeHtml(selected.summary)}</p>
+      <p>${escapeHtml(analysis.summary || "A API nao retornou amostra suficiente para leitura detalhada.")}</p>
     </div>
 
+    ${(analysis.unavailable || []).length ? `
+      <div class="analysis-warning">
+        <strong>Sem chute</strong>
+        <p>${escapeHtml((analysis.unavailable || []).join(" e "))} nao foram preenchidos porque a API nao entregou esses historicos de forma confiavel nesta consulta.</p>
+      </div>
+    ` : ""}
+
     <div class="split-analysis">
-      ${renderTeamBlock(selected.home, "Casa", selected.score.home, selected.homeStats)}
-      ${renderTeamBlock(selected.away, "Fora", selected.score.away, selected.awayStats)}
+      ${renderTeamBlock(selectedMatch.home, "Casa", selectedMatch.score?.home || "-", analysis.homeStats)}
+      ${renderTeamBlock(selectedMatch.away, "Fora", selectedMatch.score?.away || "-", analysis.awayStats)}
     </div>
 
     <div class="h2h-panel">
       <div class="panel-head compact">
         <h2>Confronto direto</h2>
-        <span>${selected.h2h.games} jogos</span>
+        <span>${safeValue(h2h.games)} jogos</span>
       </div>
       <div class="h2h-grid">
-        <div><span>Vitorias ${escapeHtml(selected.home)}</span><strong>${selected.h2h.homeWins}</strong></div>
-        <div><span>Empates</span><strong>${selected.h2h.draws}</strong></div>
-        <div><span>Vitorias ${escapeHtml(selected.away)}</span><strong>${selected.h2h.awayWins}</strong></div>
-        <div><span>Gols FT</span><strong>${formatDecimal(selected.h2h.avgGoals)}</strong></div>
-        <div><span>Cantos</span><strong>${formatDecimal(selected.h2h.avgCorners)}</strong></div>
-        <div><span>Cartoes</span><strong>${formatDecimal(selected.h2h.avgCards)}</strong></div>
-        <div><span>Over 1.5</span><strong>${escapeHtml(selected.h2h.over15)}</strong></div>
-        <div><span>Over 2.5</span><strong>${escapeHtml(selected.h2h.over25)}</strong></div>
-        <div><span>BTTS</span><strong>${escapeHtml(selected.h2h.btts)}</strong></div>
+        <div><span>Vitorias ${escapeHtml(selectedMatch.home)}</span><strong>${safeValue(h2h.homeWins)}</strong></div>
+        <div><span>Empates</span><strong>${safeValue(h2h.draws)}</strong></div>
+        <div><span>Vitorias ${escapeHtml(selectedMatch.away)}</span><strong>${safeValue(h2h.awayWins)}</strong></div>
+        <div><span>Gols FT</span><strong>${formatOptionalDecimal(h2h.avgGoals)}</strong></div>
+        <div><span>Over 1.5</span><strong>${formatOptionalPercent(h2h.over15)}</strong></div>
+        <div><span>Over 2.5</span><strong>${formatOptionalPercent(h2h.over25)}</strong></div>
+        <div><span>Over 0.5 HT</span><strong>${formatOptionalPercent(h2h.htOver05)}</strong></div>
+        <div><span>BTTS</span><strong>${formatOptionalPercent(h2h.btts)}</strong></div>
+        <div><span>Cantos/cartoes</span><strong>Sem dado</strong></div>
       </div>
     </div>
 
@@ -864,12 +1029,12 @@ function renderAnalysis() {
         <span>pre-live</span>
       </div>
       <div class="suggestion-list">
-        ${selected.suggestions.map((suggestion, index) => `
+        ${(analysis.suggestions || []).map((suggestion, index) => `
           <article class="suggestion-card">
             <div>
               <strong>${escapeHtml(suggestion.market)}</strong>
               <p>${escapeHtml(suggestion.edge)}</p>
-              <span>${escapeHtml(suggestion.confidence)} | Odd referencia ${formatDecimal(suggestion.odd)}</span>
+              <span>${escapeHtml(suggestion.confidence)} | Conferir odd na BRAVOBET</span>
             </div>
             <button class="signal-action" type="button" data-prelive-bet="${index}">Registrar</button>
           </article>
@@ -880,6 +1045,7 @@ function renderAnalysis() {
 }
 
 function renderTeamBlock(team, context, standing, stats) {
+  const safeStats = stats || {};
   return `
     <article class="team-analysis">
       <div class="team-analysis-head">
@@ -887,18 +1053,18 @@ function renderTeamBlock(team, context, standing, stats) {
           <span>${escapeHtml(context)} | ${escapeHtml(standing)}</span>
           <strong>${escapeHtml(team)}</strong>
         </div>
-        <small>${escapeHtml(stats.form)}</small>
+        <small>${escapeHtml(safeStats.form || "-")}</small>
       </div>
       <div class="team-stat-grid">
-        <div><span>Gols pro</span><strong>${formatDecimal(stats.goalsFor)}</strong></div>
-        <div><span>Gols contra</span><strong>${formatDecimal(stats.goalsAgainst)}</strong></div>
-        <div><span>Gols HT</span><strong>${formatDecimal(stats.htGoals)}</strong></div>
-        <div><span>Cantos</span><strong>${formatDecimal(stats.corners)}</strong></div>
-        <div><span>Cartoes</span><strong>${formatDecimal(stats.cards)}</strong></div>
-        <div><span>Clean sheet</span><strong>${escapeHtml(stats.cleanSheets)}</strong></div>
-        <div><span>BTTS</span><strong>${escapeHtml(stats.btts)}</strong></div>
-        <div><span>Over 1.5</span><strong>${escapeHtml(stats.over15)}</strong></div>
-        <div><span>Over 2.5</span><strong>${escapeHtml(stats.over25)}</strong></div>
+        <div><span>Jogos usados</span><strong>${safeValue(safeStats.games)}</strong></div>
+        <div><span>Gols pro</span><strong>${formatOptionalDecimal(safeStats.goalsFor)}</strong></div>
+        <div><span>Gols contra</span><strong>${formatOptionalDecimal(safeStats.goalsAgainst)}</strong></div>
+        <div><span>Gols HT</span><strong>${formatOptionalDecimal(safeStats.htGoals)}</strong></div>
+        <div><span>BTTS</span><strong>${formatOptionalPercent(safeStats.btts)}</strong></div>
+        <div><span>Over 0.5 HT</span><strong>${formatOptionalPercent(safeStats.htOver05)}</strong></div>
+        <div><span>Over 1.5</span><strong>${formatOptionalPercent(safeStats.over15)}</strong></div>
+        <div><span>Over 2.5</span><strong>${formatOptionalPercent(safeStats.over25)}</strong></div>
+        <div><span>Cantos/cartoes</span><strong>Sem dado</strong></div>
       </div>
     </article>
   `;
@@ -1023,7 +1189,8 @@ function buildBet() {
 function registerPreliveSuggestion(indexValue) {
   const match = getSelectedAnalysis();
   if (!match) return;
-  const suggestion = match.suggestions[Number(indexValue)];
+  const analysis = footballState.details[match.id]?.data;
+  const suggestion = analysis?.suggestions?.[Number(indexValue)];
   if (!suggestion) return;
 
   const stake = getRecommendedManagement(getProjectedBankroll()).stake;
@@ -1035,7 +1202,7 @@ function registerPreliveSuggestion(indexValue) {
     stake,
     result: "pending",
     date: today,
-    note: `Analise pre-live: ${suggestion.confidence}`,
+    note: `Analise API-Football: ${suggestion.confidence}. Conferir odd na BRAVOBET.`,
     profit: 0
   });
   saveState();
@@ -1044,30 +1211,11 @@ function registerPreliveSuggestion(indexValue) {
 }
 
 function getSelectedAnalysis() {
-  const matches = getDailyMatches();
-  return matches.find((match) => match.id === selectedAnalysisId) || null;
+  return footballState.matches.find((match) => match.id === selectedAnalysisId) || null;
 }
 
 function getDailyMatches(date = new Date()) {
-  const dateKey = getLocalDateKey(date);
-  const groupIndex = getDayIndex(date) % DAILY_MATCH_GROUPS.length;
-  const group = DAILY_MATCH_GROUPS[groupIndex] || DAILY_MATCH_GROUPS[0];
-
-  return group
-    .map((matchId, index) => {
-      const baseMatch = PRELIVE_MATCHES.find((match) => match.id === matchId);
-      if (!baseMatch) return null;
-      const kickoff = DAILY_KICKOFFS[index] || baseMatch.time.replace("Hoje ", "");
-      return {
-        ...baseMatch,
-        sourceId: baseMatch.id,
-        id: `${baseMatch.id}-${dateKey}`,
-        kickoff,
-        time: `Hoje ${kickoff}`
-      };
-    })
-    .filter(Boolean)
-    .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+  return footballState.matches;
 }
 
 function getDayIndex(date) {
@@ -1220,6 +1368,20 @@ function formatPercent(value) {
 
 function formatDecimal(value) {
   return percentFormatter.format(Number(value) || 0);
+}
+
+function formatOptionalDecimal(value) {
+  if (!Number.isFinite(Number(value))) return "-";
+  return percentFormatter.format(Number(value));
+}
+
+function formatOptionalPercent(value) {
+  if (!Number.isFinite(Number(value))) return "-";
+  return `${Math.round(Number(value))}%`;
+}
+
+function safeValue(value) {
+  return value === null || value === undefined || value === "" ? "-" : escapeHtml(value);
 }
 
 function formatDate(value) {
