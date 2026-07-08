@@ -2,15 +2,6 @@
   publish = "."
   command = ""
 
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
-
-[[headers]]
-  for = "/tips.json"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-
 [[headers]]
   for = "/assets/*"
   [headers.values]

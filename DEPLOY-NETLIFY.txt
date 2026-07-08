@@ -1,8 +1,8 @@
-GESTAO DUARTE TIPS - DEPLOY NETLIFY
+GESTAO DUARTE TIPS PRE-LIVE - DEPLOY
 
-Opcao rapida:
+Opcao rapida para site estatico:
 1. Acesse https://app.netlify.com/drop
-2. Arraste a pasta gestaoduartetips ou o arquivo gestaoduartetips-site.zip
+2. Arraste a pasta gestaoduartetips-prelive-pronto ou o arquivo gestaoduartetips-prelive.zip
 3. Depois do deploy, clique em Site configuration > Change site name
 4. Use um nome como gestaoduartetips
 
@@ -17,6 +17,10 @@ Dominio proprio:
 
 Arquivos importantes:
 - index.html: app principal
-- app.js: logica de gestao, sinais e dashboard
-- tips.json: feed de sinais pronto para futuramente receber dados do Telegram/backend
+- app.js: logica de gestao, analises pre-live e dashboard
+- style.css: visual principal do app
 - assets/mentor.png: imagem da capa
+
+Observacao:
+Esta versao funciona como site estatico.
+Para dados reais de jogos, rankings e historicos, plugue uma API de futebol no proximo passo.

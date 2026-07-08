@@ -1,25 +1,182 @@
 const SIGNUP_URL = "https://go.aff.bravo.bet.br/m5j77ywh?btag=021715_AD66M&utm_source=app";
 const STORAGE_KEY = "gestao-banca-exclusiva-v1";
-const DEFAULT_TIPS = [
+const PRELIVE_MATCHES = [
   {
-    id: "demo-over-15",
-    title: "Time A x Time B",
-    market: "Over 1.5 gols",
-    odd: 1.72,
-    confidence: "Entrada moderada",
-    time: "Hoje",
-    note: "Modelo de sinal. Depois isso vem do Telegram/backend.",
-    link: SIGNUP_URL
+    id: "corinthians-flamengo",
+    league: "Brasil Serie A",
+    time: "Hoje 20:30",
+    home: "Corinthians",
+    away: "Flamengo",
+    venue: "Neo Quimica Arena",
+    confidence: "Leitura moderada",
+    summary: "Confronto com Flamengo chegando mais forte em volume ofensivo, mas Corinthians costuma baixar o ritmo em casa no primeiro tempo. O mercado de gols pede protecao, enquanto cantos ganha valor se o visitante mantiver pressao pelos lados.",
+    tags: ["HT protegido", "FT gols", "Cantos"],
+    score: { home: "12o", away: "3o" },
+    kpis: [
+      { label: "Gols FT", value: "2.35", note: "media combinada" },
+      { label: "Gols HT", value: "0.85", note: "primeiro tempo" },
+      { label: "Cantos", value: "10.1", note: "media total" },
+      { label: "Cartoes", value: "5.2", note: "jogo fisico" }
+    ],
+    homeStats: {
+      form: "2V 2E 1D",
+      goalsFor: 1.20,
+      goalsAgainst: 0.90,
+      htGoals: 0.40,
+      corners: 5.1,
+      cards: 2.7,
+      cleanSheets: "40%",
+      btts: "45%",
+      over15: "70%",
+      over25: "40%"
+    },
+    awayStats: {
+      form: "4V 1E 0D",
+      goalsFor: 1.80,
+      goalsAgainst: 0.80,
+      htGoals: 0.55,
+      corners: 5.8,
+      cards: 2.4,
+      cleanSheets: "50%",
+      btts: "55%",
+      over15: "80%",
+      over25: "55%"
+    },
+    h2h: {
+      games: 10,
+      homeWins: 3,
+      draws: 3,
+      awayWins: 4,
+      avgGoals: 2.10,
+      avgCorners: 9.4,
+      avgCards: 5.7,
+      over15: "70%",
+      over25: "30%",
+      btts: "50%"
+    },
+    suggestions: [
+      { market: "Mais de 1.5 gols FT", edge: "Boa frequencia nas amostras recentes", confidence: "Media", odd: 1.42 },
+      { market: "Flamengo mais de 4.5 cantos", edge: "Volume alto fora e laterais ativos", confidence: "Media", odd: 1.72 },
+      { market: "Menos de 1.5 gols HT", edge: "Mandante inicia mais travado em casa", confidence: "Alta", odd: 1.35 }
+    ]
   },
   {
-    id: "demo-dupla",
-    title: "Time C x Time D",
-    market: "Dupla chance mandante",
-    odd: 1.55,
-    confidence: "Entrada protegida",
-    time: "Hoje",
-    note: "Use como exemplo para testar o botao de fazer aposta.",
-    link: SIGNUP_URL
+    id: "palmeiras-cruzeiro",
+    league: "Brasil Serie A",
+    time: "Hoje 19:00",
+    home: "Palmeiras",
+    away: "Cruzeiro",
+    venue: "Allianz Parque",
+    confidence: "Leitura forte",
+    summary: "Palmeiras tem consistencia defensiva em casa e costuma controlar territorio. Cruzeiro compete bem, mas cede cantos quando enfrenta times de pressao. O melhor caminho pre-live fica entre protecao no mandante e cantos do Palmeiras.",
+    tags: ["Mandante", "Cantos", "Under visitante"],
+    score: { home: "2o", away: "7o" },
+    kpis: [
+      { label: "Gols FT", value: "2.20", note: "media combinada" },
+      { label: "Gols HT", value: "0.75", note: "primeiro tempo" },
+      { label: "Cantos", value: "10.8", note: "media total" },
+      { label: "Cartoes", value: "4.6", note: "perfil medio" }
+    ],
+    homeStats: {
+      form: "4V 1E 0D",
+      goalsFor: 1.70,
+      goalsAgainst: 0.60,
+      htGoals: 0.50,
+      corners: 6.4,
+      cards: 2.1,
+      cleanSheets: "60%",
+      btts: "35%",
+      over15: "75%",
+      over25: "45%"
+    },
+    awayStats: {
+      form: "2V 2E 1D",
+      goalsFor: 1.10,
+      goalsAgainst: 1.00,
+      htGoals: 0.35,
+      corners: 4.2,
+      cards: 2.5,
+      cleanSheets: "30%",
+      btts: "50%",
+      over15: "65%",
+      over25: "35%"
+    },
+    h2h: {
+      games: 10,
+      homeWins: 5,
+      draws: 3,
+      awayWins: 2,
+      avgGoals: 2.00,
+      avgCorners: 10.2,
+      avgCards: 4.9,
+      over15: "60%",
+      over25: "30%",
+      btts: "40%"
+    },
+    suggestions: [
+      { market: "Palmeiras empate anula", edge: "Mandante consistente e menor exposicao", confidence: "Alta", odd: 1.48 },
+      { market: "Palmeiras mais de 5.5 cantos", edge: "Pressao territorial e media alta em casa", confidence: "Media", odd: 1.82 },
+      { market: "Cruzeiro menos de 1.5 gols", edge: "Visitante enfrenta defesa de baixa concessao", confidence: "Alta", odd: 1.36 }
+    ]
+  },
+  {
+    id: "uruguai-espanha",
+    league: "Internacional",
+    time: "Hoje 21:00",
+    home: "Uruguai",
+    away: "Espanha",
+    venue: "Campo neutro",
+    confidence: "Leitura moderada",
+    summary: "Jogo com selecoes de estilos diferentes: Uruguai mais direto e fisico, Espanha com posse e volume. A tendencia de cartoes e cantos pode ser mais interessante do que buscar placar alto sem protecao.",
+    tags: ["Selecoes", "Cartoes", "Cantos"],
+    score: { home: "Top 15 FIFA", away: "Top 10 FIFA" },
+    kpis: [
+      { label: "Gols FT", value: "2.15", note: "media combinada" },
+      { label: "Gols HT", value: "0.70", note: "primeiro tempo" },
+      { label: "Cantos", value: "9.6", note: "media total" },
+      { label: "Cartoes", value: "4.8", note: "duelos fortes" }
+    ],
+    homeStats: {
+      form: "3V 1E 1D",
+      goalsFor: 1.40,
+      goalsAgainst: 0.90,
+      htGoals: 0.45,
+      corners: 4.8,
+      cards: 2.8,
+      cleanSheets: "40%",
+      btts: "45%",
+      over15: "70%",
+      over25: "35%"
+    },
+    awayStats: {
+      form: "4V 0E 1D",
+      goalsFor: 1.90,
+      goalsAgainst: 0.70,
+      htGoals: 0.60,
+      corners: 5.7,
+      cards: 1.9,
+      cleanSheets: "55%",
+      btts: "40%",
+      over15: "75%",
+      over25: "45%"
+    },
+    h2h: {
+      games: 6,
+      homeWins: 1,
+      draws: 2,
+      awayWins: 3,
+      avgGoals: 2.00,
+      avgCorners: 8.9,
+      avgCards: 4.5,
+      over15: "67%",
+      over25: "33%",
+      btts: "50%"
+    },
+    suggestions: [
+      { market: "Mais de 3.5 cartoes", edge: "Perfil fisico e confronto de selecoes fortes", confidence: "Media", odd: 1.62 },
+      { market: "Espanha mais de 4.5 cantos", edge: "Posse alta gera volume ofensivo", confidence: "Media", odd: 1.70 },
+      { market: "Menos de 1.5 gols HT", edge: "Amostra aponta estudo inicial", confidence: "Alta", odd: 1.38 }
+    ]
   }
 ];
 
@@ -39,7 +196,7 @@ const defaults = {
 };
 
 const state = loadState();
-let tipsFeed = DEFAULT_TIPS;
+let selectedAnalysisId = PRELIVE_MATCHES[0].id;
 const moneyFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL"
@@ -97,8 +254,9 @@ const els = {
   compoundResult: document.querySelector("#compoundResult"),
   cycleCount: document.querySelector("#cycleCount"),
   cycleList: document.querySelector("#cycleList"),
-  signalCount: document.querySelector("#signalCount"),
-  signalList: document.querySelector("#signalList"),
+  analysisCount: document.querySelector("#analysisCount"),
+  analysisList: document.querySelector("#analysisList"),
+  analysisDetail: document.querySelector("#analysisDetail"),
   betForm: document.querySelector("#betForm"),
   betTitle: document.querySelector("#betTitle"),
   betOdd: document.querySelector("#betOdd"),
@@ -122,7 +280,6 @@ function init() {
   renderAccess();
   renderAll();
   calculateCompound();
-  loadTipsFeed();
 }
 
 function bindEvents() {
@@ -188,12 +345,17 @@ function bindEvents() {
     renderAll();
   });
 
-  els.signalList.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-signal-id]");
+  els.analysisList.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-analysis-id]");
     if (!button) return;
-    const tip = tipsFeed.find((item) => item.id === button.dataset.signalId);
-    if (!tip) return;
-    takeSignal(tip);
+    selectedAnalysisId = button.dataset.analysisId;
+    renderAnalysis();
+  });
+
+  els.analysisDetail.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-prelive-bet]");
+    if (!button) return;
+    registerPreliveSuggestion(button.dataset.preliveBet);
   });
 }
 
@@ -209,7 +371,7 @@ function renderAll() {
   renderManagement();
   renderDashboard();
   renderBetList();
-  renderSignals();
+  renderAnalysis();
   drawChart();
 }
 
@@ -283,25 +445,106 @@ function renderBetList() {
   }).join("");
 }
 
-function renderSignals() {
-  els.signalCount.textContent = `${tipsFeed.length} ${tipsFeed.length === 1 ? "ativo" : "ativos"}`;
-  els.signalList.innerHTML = tipsFeed.map((tip) => {
-    const signalStake = getSignalStake(tip);
-    return `
-      <article class="signal-card">
-        <div class="signal-top">
-          <strong class="signal-title">${escapeHtml(tip.title)}</strong>
-          <span class="signal-odd">Odd ${formatDecimal(tip.odd)}</span>
+function renderAnalysis() {
+  const selected = getSelectedAnalysis();
+  els.analysisCount.textContent = `${PRELIVE_MATCHES.length} ${PRELIVE_MATCHES.length === 1 ? "jogo" : "jogos"}`;
+  els.analysisList.innerHTML = PRELIVE_MATCHES.map((match) => `
+    <button class="analysis-card ${match.id === selected.id ? "active" : ""}" type="button" data-analysis-id="${escapeHtml(match.id)}">
+      <span class="analysis-card-time">${escapeHtml(match.time)} | ${escapeHtml(match.league)}</span>
+      <strong>${escapeHtml(match.home)} x ${escapeHtml(match.away)}</strong>
+      <small>${escapeHtml(match.confidence)} | ${escapeHtml(match.tags.join(" / "))}</small>
+    </button>
+  `).join("");
+
+  els.analysisDetail.innerHTML = `
+    <div class="analysis-hero">
+      <p class="eyebrow">${escapeHtml(selected.league)}</p>
+      <h2>${escapeHtml(selected.home)} x ${escapeHtml(selected.away)}</h2>
+      <span>${escapeHtml(selected.time)} | ${escapeHtml(selected.venue)}</span>
+    </div>
+
+    <div class="analysis-kpi-grid">
+      ${selected.kpis.map((kpi) => `
+        <div class="analysis-kpi">
+          <span>${escapeHtml(kpi.label)}</span>
+          <strong>${escapeHtml(kpi.value)}</strong>
+          <small>${escapeHtml(kpi.note)}</small>
         </div>
-        <p class="signal-meta">${escapeHtml(tip.market)} | ${escapeHtml(tip.confidence || "Entrada")}</p>
-        <p class="signal-meta">${escapeHtml(tip.time || "Agora")} - ${escapeHtml(tip.note || "")}</p>
-        <div class="signal-actions">
-          <button class="signal-action" type="button" data-signal-id="${escapeHtml(tip.id)}">Fazer aposta</button>
-          <span class="signal-secondary">${getSignalStakeLabel(tip, signalStake)}</span>
+      `).join("")}
+    </div>
+
+    <div class="analysis-summary">
+      <strong>Leitura pre-live</strong>
+      <p>${escapeHtml(selected.summary)}</p>
+    </div>
+
+    <div class="split-analysis">
+      ${renderTeamBlock(selected.home, "Casa", selected.score.home, selected.homeStats)}
+      ${renderTeamBlock(selected.away, "Fora", selected.score.away, selected.awayStats)}
+    </div>
+
+    <div class="h2h-panel">
+      <div class="panel-head compact">
+        <h2>Confronto direto</h2>
+        <span>${selected.h2h.games} jogos</span>
+      </div>
+      <div class="h2h-grid">
+        <div><span>Vitorias ${escapeHtml(selected.home)}</span><strong>${selected.h2h.homeWins}</strong></div>
+        <div><span>Empates</span><strong>${selected.h2h.draws}</strong></div>
+        <div><span>Vitorias ${escapeHtml(selected.away)}</span><strong>${selected.h2h.awayWins}</strong></div>
+        <div><span>Gols FT</span><strong>${formatDecimal(selected.h2h.avgGoals)}</strong></div>
+        <div><span>Cantos</span><strong>${formatDecimal(selected.h2h.avgCorners)}</strong></div>
+        <div><span>Cartoes</span><strong>${formatDecimal(selected.h2h.avgCards)}</strong></div>
+        <div><span>Over 1.5</span><strong>${escapeHtml(selected.h2h.over15)}</strong></div>
+        <div><span>Over 2.5</span><strong>${escapeHtml(selected.h2h.over25)}</strong></div>
+        <div><span>BTTS</span><strong>${escapeHtml(selected.h2h.btts)}</strong></div>
+      </div>
+    </div>
+
+    <div class="suggestion-panel">
+      <div class="panel-head compact">
+        <h2>Melhores opcoes</h2>
+        <span>pre-live</span>
+      </div>
+      <div class="suggestion-list">
+        ${selected.suggestions.map((suggestion, index) => `
+          <article class="suggestion-card">
+            <div>
+              <strong>${escapeHtml(suggestion.market)}</strong>
+              <p>${escapeHtml(suggestion.edge)}</p>
+              <span>${escapeHtml(suggestion.confidence)} | Odd referencia ${formatDecimal(suggestion.odd)}</span>
+            </div>
+            <button class="signal-action" type="button" data-prelive-bet="${index}">Registrar</button>
+          </article>
+        `).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderTeamBlock(team, context, standing, stats) {
+  return `
+    <article class="team-analysis">
+      <div class="team-analysis-head">
+        <div>
+          <span>${escapeHtml(context)} | ${escapeHtml(standing)}</span>
+          <strong>${escapeHtml(team)}</strong>
         </div>
-      </article>
-    `;
-  }).join("");
+        <small>${escapeHtml(stats.form)}</small>
+      </div>
+      <div class="team-stat-grid">
+        <div><span>Gols pro</span><strong>${formatDecimal(stats.goalsFor)}</strong></div>
+        <div><span>Gols contra</span><strong>${formatDecimal(stats.goalsAgainst)}</strong></div>
+        <div><span>Gols HT</span><strong>${formatDecimal(stats.htGoals)}</strong></div>
+        <div><span>Cantos</span><strong>${formatDecimal(stats.corners)}</strong></div>
+        <div><span>Cartoes</span><strong>${formatDecimal(stats.cards)}</strong></div>
+        <div><span>Clean sheet</span><strong>${escapeHtml(stats.cleanSheets)}</strong></div>
+        <div><span>BTTS</span><strong>${escapeHtml(stats.btts)}</strong></div>
+        <div><span>Over 1.5</span><strong>${escapeHtml(stats.over15)}</strong></div>
+        <div><span>Over 2.5</span><strong>${escapeHtml(stats.over25)}</strong></div>
+      </div>
+    </article>
+  `;
 }
 
 function drawChart() {
@@ -420,39 +663,30 @@ function buildBet() {
   };
 }
 
-function takeSignal(tip) {
-  const stake = getSignalStake(tip);
+function registerPreliveSuggestion(indexValue) {
+  const match = getSelectedAnalysis();
+  const suggestion = match.suggestions[Number(indexValue)];
+  if (!suggestion) return;
+
+  const stake = getRecommendedManagement(getProjectedBankroll()).stake;
   const today = new Date().toISOString().slice(0, 10);
   state.bets.unshift({
     id: window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : String(Date.now()),
-    title: `${tip.title} - ${tip.market}`,
-    odd: Number(tip.odd) || 1,
+    title: `${match.home} x ${match.away} - ${suggestion.market}`,
+    odd: Number(suggestion.odd) || 1,
     stake,
     result: "pending",
     date: today,
-    note: "Entrada salva a partir dos Sinais Duarte Tips",
+    note: `Analise pre-live: ${suggestion.confidence}`,
     profit: 0
   });
   saveState();
   renderAll();
-  window.open(tip.link || SIGNUP_URL, "_blank", "noopener");
   showView("dashboard");
 }
 
-function getSignalStake(tip) {
-  const bankroll = getProjectedBankroll();
-  const stakeValue = Number(tip.stakeValue) || 0;
-  const stakePercent = Number(tip.stakePercent) || 0;
-
-  if (stakeValue > 0) return stakeValue;
-  if (stakePercent > 0) return bankroll * (stakePercent / 100);
-  return getRecommendedManagement(bankroll).stake || bankroll * 0.02;
-}
-
-function getSignalStakeLabel(tip, stake) {
-  const stakePercent = Number(tip.stakePercent) || 0;
-  if (stakePercent > 0) return `Stake ${formatPercent(stakePercent)} | ${formatMoney(stake)}`;
-  return `Stake sugerida ${formatMoney(stake)}`;
+function getSelectedAnalysis() {
+  return PRELIVE_MATCHES.find((match) => match.id === selectedAnalysisId) || PRELIVE_MATCHES[0];
 }
 
 function calculateBetProfit(stake, odd, result) {
@@ -558,36 +792,6 @@ function loadState() {
   } catch (error) {
     return structuredClone(defaults);
   }
-}
-
-function loadTipsFeed() {
-  if (!location.protocol.startsWith("http")) {
-    renderSignals();
-    return;
-  }
-
-  fetchTipsFrom(["/api/tips", "tips.json"]);
-}
-
-function fetchTipsFrom(sources) {
-  const [source, ...rest] = sources;
-  if (!source) {
-    renderSignals();
-    return;
-  }
-
-  fetch(source, { cache: "no-store" })
-    .then((response) => response.ok ? response.json() : null)
-    .then((data) => {
-      const incoming = Array.isArray(data) ? data : data && Array.isArray(data.tips) ? data.tips : null;
-      if (incoming && incoming.length) {
-        tipsFeed = incoming;
-        renderSignals();
-        return;
-      }
-      fetchTipsFrom(rest);
-    })
-    .catch(() => fetchTipsFrom(rest));
 }
 
 function saveState() {

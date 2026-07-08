@@ -385,6 +385,7 @@ select:focus {
 
 .bet-list,
 .cycle-list,
+.analysis-list,
 .signal-list {
   display: grid;
   gap: 10px;
@@ -392,6 +393,7 @@ select:focus {
 
 .bet-row,
 .cycle-row,
+.analysis-card,
 .signal-card {
   display: grid;
   gap: 5px;
@@ -460,6 +462,160 @@ select:focus {
   color: var(--muted);
   font-size: 0.78rem;
   font-weight: 800;
+}
+
+.analysis-card {
+  width: 100%;
+  min-height: 104px;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.analysis-card.active {
+  border-color: rgba(50, 255, 79, 0.46);
+  background:
+    linear-gradient(135deg, rgba(50, 255, 79, 0.12), rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.035);
+}
+
+.analysis-card strong {
+  color: var(--silver);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.analysis-card small,
+.analysis-card-time {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.analysis-detail-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.analysis-hero {
+  display: grid;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(220, 228, 223, 0.11);
+}
+
+.analysis-hero h2 {
+  color: var(--silver);
+  font-size: 1.65rem;
+  line-height: 1.05;
+}
+
+.analysis-hero span,
+.analysis-summary p,
+.suggestion-card p {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.analysis-kpi-grid,
+.team-stat-grid,
+.h2h-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.analysis-kpi,
+.team-stat-grid div,
+.h2h-grid div {
+  display: grid;
+  gap: 5px;
+  min-height: 74px;
+  padding: 10px;
+  border: 1px solid rgba(220, 228, 223, 0.1);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.032);
+}
+
+.analysis-kpi span,
+.team-analysis-head span,
+.team-stat-grid span,
+.h2h-grid span,
+.suggestion-card span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.analysis-kpi strong,
+.team-stat-grid strong,
+.h2h-grid strong {
+  color: var(--silver);
+  font-size: 1.05rem;
+}
+
+.analysis-kpi small {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.analysis-summary,
+.h2h-panel,
+.suggestion-panel,
+.team-analysis {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(220, 228, 223, 0.1);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.032);
+}
+
+.analysis-summary strong,
+.team-analysis-head strong,
+.suggestion-card strong {
+  color: var(--silver);
+}
+
+.split-analysis,
+.suggestion-list {
+  display: grid;
+  gap: 10px;
+}
+
+.team-analysis-head,
+.suggestion-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.team-analysis-head small {
+  flex: 0 0 auto;
+  border: 1px solid rgba(50, 255, 79, 0.26);
+  border-radius: 999px;
+  color: var(--green);
+  padding: 5px 8px;
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.panel-head.compact {
+  margin-bottom: 0;
+}
+
+.suggestion-card {
+  padding: 10px;
+  border: 1px solid rgba(220, 228, 223, 0.1);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.13);
+}
+
+.suggestion-card div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
 }
 
 .bet-title {
