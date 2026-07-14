@@ -572,10 +572,18 @@ const els = {
   compoundResult: document.querySelector("#compoundResult"),
   cycleCount: document.querySelector("#cycleCount"),
   cycleList: document.querySelector("#cycleList"),
-  analysisDate: document.querySelector("#analysisDate"),
-  analysisCount: document.querySelector("#analysisCount"),
-  analysisList: document.querySelector("#analysisList"),
-  analysisDetail: document.querySelector("#analysisDetail"),
+  mentorForm: document.querySelector("#mentorForm"),
+  mentorQuestion: document.querySelector("#mentorQuestion"),
+  mentorOdd: document.querySelector("#mentorOdd"),
+  mentorConfidence: document.querySelector("#mentorConfidence"),
+  mentorEntries: document.querySelector("#mentorEntries"),
+  mentorStake: document.querySelector("#mentorStake"),
+  mentorMarket: document.querySelector("#mentorMarket"),
+  mentorAnswer: document.querySelector("#mentorAnswer"),
+  mentorBankroll: document.querySelector("#mentorBankroll"),
+  mentorRecommendedStake: document.querySelector("#mentorRecommendedStake"),
+  mentorRiskBadge: document.querySelector("#mentorRiskBadge"),
+  mentorQuickActions: document.querySelector("#mentorQuickActions"),
   betForm: document.querySelector("#betForm"),
   betTitle: document.querySelector("#betTitle"),
   betOdd: document.querySelector("#betOdd"),
@@ -599,7 +607,6 @@ function init() {
   renderAccess();
   renderAll();
   calculateCompound();
-  loadFootballFixtures();
 }
 
 function bindEvents() {
@@ -665,29 +672,16 @@ function bindEvents() {
     renderAll();
   });
 
-  els.analysisList.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-analysis-id]");
-    if (!button) return;
-    selectedAnalysisId = button.dataset.analysisId;
-    renderAnalysis();
-    loadFootballAnalysis(selectedAnalysisId);
-    window.setTimeout(() => {
-      els.analysisDetail.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 40);
+  els.mentorForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    answerMentor();
   });
 
-  els.analysisDetail.addEventListener("click", (event) => {
-    const closeButton = event.target.closest("[data-close-analysis]");
-    if (closeButton) {
-      selectedAnalysisId = "";
-      renderAnalysis();
-      els.analysisList.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-
-    const button = event.target.closest("[data-prelive-bet]");
+  els.mentorQuickActions.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-mentor-prompt]");
     if (!button) return;
-    registerPreliveSuggestion(button.dataset.preliveBet);
+    els.mentorQuestion.value = button.dataset.mentorPrompt;
+    answerMentor();
   });
 }
 
@@ -703,7 +697,7 @@ function renderAll() {
   renderManagement();
   renderDashboard();
   renderBetList();
-  renderAnalysis();
+  renderMentor();
   drawChart();
 }
 
@@ -775,6 +769,201 @@ function renderBetList() {
       </article>
     `;
   }).join("");
+}
+
+function renderMentor() {
+  const bankroll = getProjectedBankroll();
+  const recommended = getRecommendedManagement(bankroll);
+  const stats = getStats();
+  const today = getTodayStats();
+  const riskTone = today.profit <= -(bankroll * (state.settings.stopLossPercent / 100))
+    ? "Pausar"
+    : today.profit > 0 ? "Dia positivo" : "Gestao ativa";
+
+  els.mentorBankroll.textContent = `Banca ${formatMoney(bankroll)}`;
+  els.mentorRecommendedStake.textContent = formatMoney(recommended.stake);
+  els.mentorRiskBadge.textContent = riskTone;
+
+  if (!els.mentorAnswer.innerHTML.trim()) {
+    els.mentorAnswer.innerHTML = renderMentorWelcome(recommended, stats, today);
+  }
+}
+
+function renderMentorWelcome(recommended, stats, today) {
+  return `
+    <div class="mentor-answer-card mentor-empty">
+      <span class="mentor-label">IA pronta</span>
+      <h2>Me diga a entrada antes de apostar.</h2>
+      <p>Eu vou analisar stake, odd, risco, stop do dia e disciplina de banca. A ideia aqui e proteger sua banca antes de pensar em lucro.</p>
+      <div class="mentor-kpi-grid">
+        <div><span>Stake base</span><strong>${formatMoney(recommended.stake)}</strong></div>
+        <div><span>Perfil</span><strong>${escapeHtml(recommended.profile)}</strong></div>
+        <div><span>Entradas hoje</span><strong>${today.count}</strong></div>
+        <div><span>Taxa green</span><strong>${formatPercent(stats.greenRate)}</strong></div>
+      </div>
+    </div>
+  `;
+}
+
+function answerMentor() {
+  const context = getMentorContext();
+  const advice = buildMentorAdvice(context);
+  els.mentorAnswer.innerHTML = renderMentorAdvice(advice, context);
+}
+
+function getMentorContext() {
+  const bankroll = getProjectedBankroll();
+  const recommended = getRecommendedManagement(bankroll);
+  const question = els.mentorQuestion.value.trim();
+  const odd = getNumber(els.mentorOdd, 1.8);
+  const entries = Math.max(0, Math.round(getNumber(els.mentorEntries, 0)));
+  const confidence = els.mentorConfidence.value;
+  const market = els.mentorMarket.value.trim();
+  const plannedStake = getNumber(els.mentorStake, 0);
+  const today = getTodayStats();
+  const stopGainValue = bankroll * (state.settings.stopGainPercent / 100);
+  const stopLossValue = bankroll * (state.settings.stopLossPercent / 100);
+
+  return {
+    question,
+    odd,
+    entries,
+    confidence,
+    market,
+    plannedStake,
+    bankroll,
+    recommended,
+    today,
+    stopGainValue,
+    stopLossValue
+  };
+}
+
+function buildMentorAdvice(context) {
+  const lower = context.question.toLowerCase();
+  const confidenceMultiplier = {
+    baixa: 0.5,
+    media: 1,
+    alta: 1.15
+  }[context.confidence] || 1;
+  const baseStake = context.recommended.stake * confidenceMultiplier;
+  const isRecoverMode = /recuper|dobr|all.?in|ir pesado|perdi|red/i.test(lower);
+  const asksStats = /media|gols|ht|ft|cantos|cartoes|flamengo|corinthians|time|historico|ranking/i.test(lower);
+  const riskReasons = [];
+
+  if (context.odd >= 2.5) riskReasons.push("Odd alta aumenta variancia. Use stake menor ou pule se nao houver valor muito claro.");
+  if (context.entries >= 4) riskReasons.push("Muitas entradas no mesmo dia aumentam chance de decisao emocional.");
+  if (context.confidence === "baixa") riskReasons.push("Confianca baixa nao combina com stake cheia.");
+  if (context.plannedStake && context.plannedStake > context.recommended.stake * 1.35) riskReasons.push("Stake pensada esta acima da gestao recomendada.");
+  if (context.today.profit <= -context.stopLossValue) riskReasons.push("Stop loss do dia ja foi atingido. O correto e pausar.");
+  if (context.today.profit >= context.stopGainValue) riskReasons.push("Stop gain do dia ja foi atingido. Proteja o lucro.");
+  if (isRecoverMode) riskReasons.push("Modo recuperacao detectado. Nao aumente stake para buscar prejuizo.");
+
+  let suggestedStake = baseStake;
+  if (context.odd >= 2.5) suggestedStake *= 0.65;
+  if (context.entries >= 4) suggestedStake *= 0.7;
+  if (isRecoverMode || context.today.profit <= -context.stopLossValue) suggestedStake = 0;
+  if (context.plannedStake && context.plannedStake < suggestedStake) suggestedStake = context.plannedStake;
+  suggestedStake = Math.max(0, Math.min(suggestedStake, context.recommended.stake * 1.2));
+
+  const riskLevel = riskReasons.length >= 4 || suggestedStake === 0
+    ? "Alto"
+    : riskReasons.length >= 2 ? "Moderado" : "Controlado";
+  const decision = suggestedStake === 0
+    ? "Pular entrada e proteger a banca"
+    : riskLevel === "Alto" ? "So considerar com stake minima"
+    : riskLevel === "Moderado" ? "Reduzir stake e confirmar valor"
+    : "Dentro da gestao";
+
+  const checklist = [
+    "A entrada respeita a stake indicada?",
+    "Voce aceitaria perder essa stake sem tentar recuperar?",
+    "A odd tem valor real ou e so ansiedade?",
+    "O stop do dia continua protegido?"
+  ];
+
+  if (asksStats) {
+    riskReasons.push("Esta versao rapida nao consulta estatistica real de times. Use o mentor para stake, risco e disciplina; dados de jogo precisam de fonte externa confiavel.");
+  }
+
+  return {
+    decision,
+    riskLevel,
+    suggestedStake,
+    stakePercent: context.bankroll ? (suggestedStake / context.bankroll) * 100 : 0,
+    maxLoss: suggestedStake,
+    possibleProfit: suggestedStake * Math.max(0, context.odd - 1),
+    reasons: riskReasons.length ? riskReasons : ["Entrada dentro dos limites de banca informados."],
+    checklist
+  };
+}
+
+function renderMentorAdvice(advice, context) {
+  return `
+    <div class="mentor-answer-card">
+      <span class="mentor-label">Resposta do mentor</span>
+      <h2>${escapeHtml(advice.decision)}</h2>
+      <p>${escapeHtml(buildMentorIntro(advice, context))}</p>
+
+      <div class="mentor-decision-band ${advice.riskLevel.toLowerCase()}">
+        <div>
+          <span>Risco</span>
+          <strong>${escapeHtml(advice.riskLevel)}</strong>
+        </div>
+        <div>
+          <span>Stake indicada</span>
+          <strong>${formatMoney(advice.suggestedStake)}</strong>
+        </div>
+        <div>
+          <span>% da banca</span>
+          <strong>${formatPercent(advice.stakePercent)}</strong>
+        </div>
+      </div>
+
+      <div class="mentor-kpi-grid">
+        <div><span>Odd</span><strong>${formatDecimal(context.odd)}</strong></div>
+        <div><span>Lucro possivel</span><strong>${formatMoney(advice.possibleProfit)}</strong></div>
+        <div><span>Perda maxima</span><strong>${formatMoney(advice.maxLoss)}</strong></div>
+        <div><span>Entradas hoje</span><strong>${context.entries}</strong></div>
+      </div>
+
+      <div class="mentor-section">
+        <strong>Por que essa leitura?</strong>
+        <ul>
+          ${advice.reasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}
+        </ul>
+      </div>
+
+      <div class="mentor-section">
+        <strong>Checklist antes de entrar</strong>
+        <ul>
+          ${advice.checklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+function buildMentorIntro(advice, context) {
+  if (advice.suggestedStake <= 0) {
+    return "Minha leitura e pausar. Quando a gestao manda parar, insistir costuma transformar uma perda pequena em problema grande.";
+  }
+
+  if (context.market) {
+    return `Para ${context.market}, eu manteria a decisao pela gestao: stake controlada, sem dobrar e sem passar do stop.`;
+  }
+
+  return "Sem depender de palpite de jogo, a decisao mais importante aqui e controlar tamanho da entrada e preservar sua banca.";
+}
+
+function getTodayStats() {
+  const today = getLocalDateKey(new Date());
+  const bets = state.bets.filter((bet) => bet.date === today);
+  const profit = bets.reduce((sum, bet) => sum + bet.profit, 0);
+  return {
+    count: bets.length,
+    profit
+  };
 }
 
 async function loadFootballFixtures() {

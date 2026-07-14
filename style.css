@@ -1091,6 +1091,213 @@ select:focus {
   background: var(--green);
 }
 
+.mentor-view.active {
+  gap: 14px;
+}
+
+.mentor-hero {
+  display: grid;
+  gap: 16px;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(50, 255, 79, 0.18), rgba(20, 30, 25, 0.86) 55%, rgba(3, 7, 4, 0.96)),
+    var(--panel);
+}
+
+.mentor-hero h2 {
+  margin-top: 5px;
+  color: var(--silver);
+  font-size: clamp(2rem, 9vw, 3.8rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.mentor-hero p:not(.eyebrow) {
+  max-width: 620px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.mentor-status {
+  display: grid;
+  gap: 5px;
+  min-width: 190px;
+  padding: 14px;
+  border: 1px solid rgba(50, 255, 79, 0.22);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.mentor-status span,
+.mentor-label {
+  color: var(--green);
+  font-size: 0.74rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.mentor-status strong {
+  color: var(--silver);
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.mentor-status small {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.mentor-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.mentor-chat-panel,
+.mentor-answer-panel {
+  min-width: 0;
+}
+
+.mentor-chat-panel {
+  background:
+    linear-gradient(180deg, rgba(50, 255, 79, 0.08), transparent 34%),
+    var(--panel);
+}
+
+.mentor-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mentor-quick-actions button {
+  min-height: 34px;
+  border: 1px solid rgba(50, 255, 79, 0.22);
+  border-radius: 999px;
+  color: var(--silver);
+  background: rgba(50, 255, 79, 0.06);
+  cursor: pointer;
+  padding: 0 10px;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.mentor-quick-actions button:hover {
+  border-color: rgba(50, 255, 79, 0.48);
+  color: var(--green);
+}
+
+.mentor-form {
+  display: grid;
+  gap: 12px;
+}
+
+.mentor-form textarea {
+  width: 100%;
+  min-height: 106px;
+  border: 1px solid rgba(220, 228, 223, 0.16);
+  border-radius: var(--radius);
+  outline: 0;
+  color: var(--text);
+  background: rgba(1, 5, 3, 0.88);
+  padding: 12px;
+  resize: vertical;
+}
+
+.mentor-form textarea:focus {
+  border-color: rgba(50, 255, 79, 0.78);
+  box-shadow: 0 0 0 3px rgba(50, 255, 79, 0.12);
+}
+
+.mentor-answer-card {
+  display: grid;
+  gap: 14px;
+  min-height: 100%;
+  padding: 16px;
+  border: 1px solid rgba(220, 228, 223, 0.12);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(50, 255, 79, 0.08), rgba(255, 255, 255, 0.035) 36%),
+    var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.mentor-answer-card h2 {
+  color: var(--silver);
+  font-size: clamp(1.5rem, 6vw, 2.45rem);
+  line-height: 1;
+}
+
+.mentor-answer-card p {
+  color: var(--muted);
+  line-height: 1.48;
+}
+
+.mentor-decision-band,
+.mentor-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mentor-decision-band {
+  border-left: 4px solid var(--green);
+}
+
+.mentor-decision-band.controlado {
+  border-left-color: var(--green);
+}
+
+.mentor-decision-band.moderado {
+  border-left-color: var(--amber);
+}
+
+.mentor-decision-band.alto {
+  border-left-color: var(--red);
+}
+
+.mentor-decision-band div,
+.mentor-kpi-grid div {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid rgba(220, 228, 223, 0.11);
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.mentor-decision-band span,
+.mentor-kpi-grid span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.mentor-decision-band strong,
+.mentor-kpi-grid strong {
+  color: var(--silver);
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+
+.mentor-section {
+  display: grid;
+  gap: 8px;
+}
+
+.mentor-section strong {
+  color: var(--silver);
+}
+
+.mentor-section ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
 .recommendation-band,
 .compound-result {
   display: grid;
@@ -1234,6 +1441,20 @@ select:focus {
     grid-template-columns: 1fr;
   }
 
+  .mentor-hero {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
+  .mentor-grid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    align-items: stretch;
+  }
+
+  .mentor-decision-band {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   #view-analysis .analysis-topline,
   #view-analysis .analysis-feed-panel,
   #view-analysis .analysis-detail-panel {
@@ -1289,6 +1510,21 @@ select:focus {
 }
 
 @media (max-width: 720px) {
+  .mentor-hero,
+  .mentor-grid,
+  .mentor-decision-band,
+  .mentor-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mentor-status {
+    min-width: 0;
+  }
+
+  .mentor-answer-card {
+    padding: 14px;
+  }
+
   .fixture-card,
   .fixture-card-main {
     grid-template-columns: 1fr;

@@ -1,4 +1,4 @@
-gestaoduartetips analises pre-live mobile fix v7
+gestaoduartetips mentor ia local v8
 image: embedded in index.html
-frontend: dashboard, banca, odds, jogos e analises pre-live com lista em cards
-backend: netlify functions + API_FOOTBALL_KEY com jogos reais filtrados por relevancia
+frontend: dashboard, banca, odds, jogos e mentor de gestao com respostas locais
+backend: sem dependencia de API para a aba Mentor

@@ -216,24 +216,77 @@
           </div>
         </section>
 
-        <section class="tab-view analysis-view" id="view-analysis" aria-labelledby="tab-analysis">
-          <div class="analysis-topline">
+        <section class="tab-view mentor-view" id="view-analysis" aria-labelledby="tab-analysis">
+          <div class="mentor-hero panel">
             <div>
-              <p class="eyebrow">Agenda pr&eacute;-live</p>
-              <h2>Confrontos do dia</h2>
+              <p class="eyebrow">Mentor de gest&atilde;o</p>
+              <h2>IA Duarte Tips</h2>
+              <p>Resposta r&aacute;pida para stake, risco, stop, disciplina e plano de banca.</p>
             </div>
-            <span id="analysisDate">Hoje</span>
+            <div class="mentor-status">
+              <span id="mentorRiskBadge">Gest&atilde;o ativa</span>
+              <strong id="mentorRecommendedStake">R$ 0,00</strong>
+              <small>stake base recomendada</small>
+            </div>
           </div>
 
-          <div class="panel analysis-feed-panel">
-            <div class="panel-head">
-              <h2>Jogos de hoje</h2>
-              <span id="analysisCount">0 jogos</span>
-            </div>
-            <div class="analysis-list" id="analysisList"></div>
-          </div>
+          <div class="mentor-grid">
+            <div class="panel mentor-chat-panel">
+              <div class="panel-head">
+                <h2>Pergunte ao mentor</h2>
+                <span id="mentorBankroll">Banca R$ 0,00</span>
+              </div>
 
-          <div class="panel analysis-detail-panel" id="analysisDetail"></div>
+              <div class="mentor-quick-actions" id="mentorQuickActions">
+                <button type="button" data-mentor-prompt="Qual stake usar para uma odd 1.80 com confian&ccedil;a m&eacute;dia?">Stake ideal</button>
+                <button type="button" data-mentor-prompt="Estou em red no dia. Devo continuar apostando?">Estou em red</button>
+                <button type="button" data-mentor-prompt="Quantas entradas posso fazer hoje sem fugir da gest&atilde;o?">Plano do dia</button>
+                <button type="button" data-mentor-prompt="Odd alta vale a pena se a banca estiver pequena?">Odd alta</button>
+              </div>
+
+              <form class="mentor-form" id="mentorForm">
+                <label class="field">
+                  <span>Sua pergunta</span>
+                  <textarea id="mentorQuestion" rows="4" placeholder="Ex: Tenho banca de R$ 500, odd 1.85 e j&aacute; fiz 2 entradas hoje. Qual stake usar?"></textarea>
+                </label>
+
+                <div class="dual-fields">
+                  <label class="field">
+                    <span>Odd da entrada</span>
+                    <input id="mentorOdd" type="number" min="1.01" step="0.01" inputmode="decimal" value="1.80">
+                  </label>
+                  <label class="field">
+                    <span>Confian&ccedil;a</span>
+                    <select id="mentorConfidence">
+                      <option value="media">M&eacute;dia</option>
+                      <option value="baixa">Baixa</option>
+                      <option value="alta">Alta</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div class="dual-fields">
+                  <label class="field">
+                    <span>Entradas hoje</span>
+                    <input id="mentorEntries" type="number" min="0" max="20" step="1" inputmode="numeric" value="0">
+                  </label>
+                  <label class="field">
+                    <span>Stake pensada</span>
+                    <input id="mentorStake" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Opcional">
+                  </label>
+                </div>
+
+                <label class="field">
+                  <span>Mercado</span>
+                  <input id="mentorMarket" placeholder="Ex: Over 1.5, ambas marcam, escanteios">
+                </label>
+
+                <button class="primary-action" type="submit">Gerar orienta&ccedil;&atilde;o</button>
+              </form>
+            </div>
+
+            <div class="mentor-answer-panel" id="mentorAnswer"></div>
+          </div>
         </section>
 
         <section class="tab-view" id="view-bets" aria-labelledby="tab-bets">
@@ -287,7 +340,7 @@
           <button class="nav-item active" id="tab-dashboard" type="button" data-view="dashboard">Dash</button>
           <button class="nav-item" id="tab-bankroll" type="button" data-view="bankroll">Banca</button>
           <button class="nav-item" id="tab-compound" type="button" data-view="compound">Odds</button>
-          <button class="nav-item" id="tab-analysis" type="button" data-view="analysis">An&aacute;lises</button>
+          <button class="nav-item" id="tab-analysis" type="button" data-view="analysis">Mentor</button>
           <button class="nav-item" id="tab-bets" type="button" data-view="bets">Jogos</button>
         </nav>
       </main>
